@@ -1,0 +1,21 @@
+{
+    "name": "fortune/fortune",
+    "authors": [
+        {
+            "name": "Justin Fortunato",
+            "email": "jfortunato25@gmail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "require-dev": {
+        "behat/behat": "2.4.*@stable",
+        "phpspec/phpspec": "~2.0",
+        "phpunit/phpunit": "~4.0",
+        "guzzlehttp/guzzle": "~4.0"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    }
+}
