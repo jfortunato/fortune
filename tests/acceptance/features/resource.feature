@@ -24,7 +24,7 @@ Feature: Resource
 
     Scenario: Creating a new dog
         Given I send the following parameters:
-            | name |
+            | name  |
             | Lizzy |
         When I send a POST request to "/dogs"
         Then The response code should be 201
@@ -32,3 +32,12 @@ Feature: Resource
         And The response should contain JSON '{"id":"3"}'
         When I send a GET request to "/dogs/3"
         Then The response should contain JSON '{"name":"Lizzy"}'
+
+    Scenario: Updating an existing dog
+        Given I send the following parameters:
+            | name  |
+            | Lucca |
+        When I send a PUT request to "/dogs/1"
+        Then The response code should be 204
+        When I send a GET request to "/dogs/1"
+        Then The response should contain JSON '{"name":"Lucca"}'

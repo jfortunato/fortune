@@ -10,7 +10,6 @@ $output = new Fortune\Output\Driver\SimpleOutput;
 $resource = new Fortune\Resource\Resource($repository, $serializer, $output);
 
 // routing is out of the scope of this library
-header('Content-Type: application/json');
 if ($uri === '/dogs') {
     if ($_SERVER['REQUEST_METHOD'] === "GET") {
         echo $resource->index();
@@ -18,5 +17,9 @@ if ($uri === '/dogs') {
         echo $resource->create($_POST);
     }
 } else if (preg_match('/^\/dogs\/(\d)$/', $uri, $id)) {
-    echo $resource->show($id[1]);
+    if ($_SERVER['REQUEST_METHOD'] === "GET") {
+        echo $resource->show($id[1]);
+    } else if ($_SERVER['REQUEST_METHOD'] === "PUT") {
+        echo $resource->update($id[1], array('name' => 'Lucca'));
+    }
 }

@@ -14,6 +14,8 @@ class Resource
 
     protected $output;
 
+    protected $resources;
+
     public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
     {
         $this->repository = $repository;
@@ -23,23 +25,35 @@ class Resource
 
     public function index()
     {
-        $resources = $this->repository->findAll();
+        $this->resources = $this->repository->findAll();
 
-        return $this->output->response($this->serialize($resources), 200);
+        return $this->response(200);
     }
 
     public function show($id)
     {
-        $resource = $this->repository->find($id);
+        $this->resources = $this->repository->find($id);
 
-        return $this->output->response($this->serialize($resource), 200);
+        return $this->response(200);
     }
 
     public function create(array $input)
     {
-        $resource = $this->repository->create($input);
+        $this->resources = $this->repository->create($input);
 
-        return $this->output->response($this->serialize($resource), 201);
+        return $this->response(201);
+    }
+
+    public function update($id, array $input)
+    {
+        $this->repository->update($id, $input);
+
+        return $this->response(204);
+    }
+
+    protected function response($code)
+    {
+        return $this->output->response($this->serialize($this->resources), $code);
     }
 
     protected function serialize($resources)

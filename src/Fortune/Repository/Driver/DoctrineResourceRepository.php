@@ -37,4 +37,15 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
 
         return $resource;
     }
+
+    public function update($id, array $input)
+    {
+        $resource = $this->find($id);
+        $resource->setName($input['name']);
+
+        $this->manager->persist($resource);
+        $this->manager->flush();
+
+        return $resource;
+    }
 }

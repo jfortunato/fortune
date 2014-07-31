@@ -52,4 +52,13 @@ class ResourceSpec extends ObjectBehavior
 
         $this->create(array('input'))->shouldReturn('response');
     }
+
+    function its_update_method_can_update_existing_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    {
+        $repository->update(1, ['input'])->shouldBeCalled()->willReturn($resource = 'foo');
+
+        $output->response(null, 204)->shouldBeCalled()->willReturn('response');;
+
+        $this->update(1, ['input'])->shouldReturn('response');
+    }
 }
