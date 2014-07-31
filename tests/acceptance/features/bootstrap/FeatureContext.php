@@ -1,5 +1,7 @@
 <?php
 
+use Doctrine\ORM\Tools\SchemaTool;
+
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,

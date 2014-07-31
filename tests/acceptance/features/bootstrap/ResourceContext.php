@@ -1,11 +1,10 @@
 <?php
 
-use Behat\Behat\Context\BehatContext;
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client as Guzzle;
 
-class ResourceContext extends BehatContext
+class ResourceContext extends BaseContext
 {
     protected $dogs = [];
 
@@ -92,5 +91,14 @@ class ResourceContext extends BehatContext
 
     public function thereIsDog($id = null, array $dogExtra = array())
     {
+        if (null === $dog = $this->manager->getRepository('Fortune\Test\Entity\Dog')->findOneBy(array('id' => $id))) {
+            $dog = new Fortune\Test\Entity\Dog;
+            $dog->setName($dogExtra['name']);
+
+            $this->manager->persist($dog);
+            $this->manager->flush();
+        }
+
+        return $dog;
     }
 }

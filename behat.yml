@@ -2,3 +2,5 @@ default:
     paths:
         features: tests/acceptance/features
         bootstrap: tests/acceptance/features/bootstrap
+    extensions:
+        tests/acceptance/features/extensions/DoctrineAwareExtension.php: ~
