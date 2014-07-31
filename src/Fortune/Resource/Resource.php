@@ -34,7 +34,9 @@ class Resource
     {
         $this->resources = $this->repository->find($id);
 
-        return $this->response(200);
+        $code = $this->resources ? 200:404;
+
+        return $this->response($code);
     }
 
     public function create(array $input)
@@ -47,6 +49,13 @@ class Resource
     public function update($id, array $input)
     {
         $this->repository->update($id, $input);
+
+        return $this->response(204);
+    }
+
+    public function delete($id)
+    {
+        $this->repository->delete($id);
 
         return $this->response(204);
     }

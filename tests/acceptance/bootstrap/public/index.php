@@ -20,6 +20,9 @@ if ($uri === '/dogs') {
     if ($_SERVER['REQUEST_METHOD'] === "GET") {
         echo $resource->show($id[1]);
     } else if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-        echo $resource->update($id[1], array('name' => 'Lucca'));
+        parse_str(file_get_contents("php://input"), $input);
+        echo $resource->update($id[1], $input);
+    } else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
+        echo $resource->delete($id[1]);
     }
 }

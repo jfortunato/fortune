@@ -53,12 +53,30 @@ class ResourceSpec extends ObjectBehavior
         $this->create(array('input'))->shouldReturn('response');
     }
 
-    function its_update_method_can_update_existing_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    function its_update_method_can_update_existing_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, OutputInterface $output)
     {
         $repository->update(1, ['input'])->shouldBeCalled()->willReturn($resource = 'foo');
 
         $output->response(null, 204)->shouldBeCalled()->willReturn('response');;
 
         $this->update(1, ['input'])->shouldReturn('response');
+    }
+
+    function its_delete_method_can_delete_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, OutputInterface $output)
+    {
+        $repository->delete(1)->shouldBeCalled();
+
+        $output->response(null, 204)->shouldBeCalled()->willReturn('response');
+
+        $this->delete(1);
+    }
+
+    function it_should_throw_404_when_resource_not_found(ResourceRepositoryInterface $repository, OutputInterface $output)
+    {
+        $repository->find(1)->shouldBeCalled()->willReturn(null);
+
+        $output->response(null, 404)->shouldBeCalled()->willReturn('response');
+
+        $this->show(1);
     }
 }

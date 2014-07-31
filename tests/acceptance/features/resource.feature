@@ -41,3 +41,9 @@ Feature: Resource
         Then The response code should be 204
         When I send a GET request to "/dogs/1"
         Then The response should contain JSON '{"name":"Lucca"}'
+
+    Scenario: Deleting a dog
+        When I send a DELETE request to "/dogs/1"
+        Then The response code should be 204
+        When I send a GET request to "/dogs/1"
+        Then The response code should be 404

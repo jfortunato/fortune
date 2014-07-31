@@ -48,4 +48,12 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
 
         return $resource;
     }
+
+    public function delete($id)
+    {
+        $resource = $this->find($id);
+
+        $this->manager->remove($resource);
+        $this->manager->flush();
+    }
 }
