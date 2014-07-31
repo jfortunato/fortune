@@ -1,0 +1,4 @@
+suites:
+    Fortune:
+        namespace: Fortune
+        spec_path: tests/unit

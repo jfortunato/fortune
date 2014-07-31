@@ -15,3 +15,9 @@ Feature: Resource
         Then The response code should be 200
         Then The response is JSON
         And The response should contain JSON '[{"name":"Fido"}, {"name":"Daisy"}]'
+
+    Scenario: Getting a a single dog
+        When I send a GET request to "/dogs/1"
+        Then The response code should be 200
+        Then The response is JSON
+        And The response should contain JSON '{"name":"Fido"}'

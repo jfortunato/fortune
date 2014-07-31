@@ -33,7 +33,10 @@ class ResourceContext extends BehatContext
     public function theFollowingDogsExist(TableNode $table)
     {
         foreach ($table->getHash() as $data) {
-            $this->dogs[] = ['id' => $data['id'], 'name' => $data['name']];
+            //$this->dogs[] = ['id' => $data['id'], 'name' => $data['name']];
+            $this->thereIsDog($data['id'], array(
+                'name' => $data['name'],
+            ));
         }
     }
 
@@ -85,5 +88,9 @@ class ResourceContext extends BehatContext
         } else {
             assertEquals($value, $haystack[$key]);
         }
+    }
+
+    public function thereIsDog($id = null, array $dogExtra = array())
+    {
     }
 }
