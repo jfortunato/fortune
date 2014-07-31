@@ -2,25 +2,38 @@
 
 namespace Fortune\Repository;
 
-use Doctrine\Common\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityManager;
 
 class DoctrineResourceRepository implements ResourceRepositoryInterface
 {
-    protected $repository;
+    protected $manager;
 
-    public function __construct(ObjectRepository $repository)
+    protected $resourceClass;
+
+    public function __construct(EntityManager $manager, $resourceClass)
     {
-        $this->repository = $repository;
+        $this->manager = $manager;
+        $this->resourceClass = $resourceClass;
     }
-
 
     public function findAll()
     {
-        return $this->repository->findAll();
+        return $this->manager->getRepository($this->resourceClass)->findAll();
     }
 
     public function find($id)
     {
-        return $this->repository->find($id);
+        return $this->manager->getRepository($this->resourceClass)->find($id);
+    }
+
+    public function create(array $input)
+    {
+        $resource = new $this->resourceClass;
+        $resource->setName($input['name']);
+
+        $this->manager->persist($resource);
+        $this->manager->flush();
+
+        return $resource;
     }
 }

@@ -32,7 +32,6 @@ class ResourceContext extends BaseContext
     public function theFollowingDogsExist(TableNode $table)
     {
         foreach ($table->getHash() as $data) {
-            //$this->dogs[] = ['id' => $data['id'], 'name' => $data['name']];
             $this->thereIsDog($data['id'], array(
                 'name' => $data['name'],
             ));
@@ -48,7 +47,39 @@ class ResourceContext extends BaseContext
 
         $method = strtolower($method);
 
-        $this->response = $this->client->$method($url);
+        $this->response = $this->client->$method($url, [
+            'body' => $this->query,
+            'headers' => $this->headers,
+        ]);
+
+        // reset query params in case we make another request
+        $this->query = array();
+    }
+
+    /**
+     * @Given /^I send the following parameters:$/
+     */
+    public function iSendTheFollowingParameters(TableNode $table)
+    {
+        foreach ($table->getHash() as $data) {
+            foreach ($data as $key => $value) {
+                $this->addRequestParameter($key, $value);
+            }
+        }
+    }
+
+    /**
+     * @Given /^I send the ([a-zA-Z_]+) "([^"]*)"$/
+     * @Given /^I send the ([a-zA-Z_]+):$/
+     */
+    public function addRequestParameter($parameter, $value)
+    {
+        // the parameter we are adding could be an array of params
+        if ($value instanceof TableNode) {
+            $value = $value->getHash();
+        }
+
+        $this->query[$parameter] = $value;
     }
 
     /**
