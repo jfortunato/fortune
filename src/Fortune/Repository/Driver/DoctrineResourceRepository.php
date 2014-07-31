@@ -1,8 +1,9 @@
 <?php
 
-namespace Fortune\Repository;
+namespace Fortune\Repository\Driver;
 
 use Doctrine\ORM\EntityManager;
+use Fortune\Repository\ResourceRepositoryInterface;
 
 class DoctrineResourceRepository implements ResourceRepositoryInterface
 {

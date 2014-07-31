@@ -1,6 +1,8 @@
 <?php
 
-namespace Fortune\Output;
+namespace Fortune\Output\Driver;
+
+use Fortune\Output\OutputInterface;
 
 class SimpleOutput implements OutputInterface
 {
