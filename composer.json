@@ -7,7 +7,8 @@
         }
     ],
     "require": {
-        "jms/serializer": "~0.16"
+        "jms/serializer": "~0.16",
+        "vlucas/valitron": "~1.1.7"
     },
     "require-dev": {
         "behat/behat": "2.4.*@stable",

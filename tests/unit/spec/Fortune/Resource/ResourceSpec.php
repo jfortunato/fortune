@@ -7,11 +7,11 @@ use Prophecy\Argument;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\Output\OutputInterface;
-use Fortune\Validator\ResourceValidator;
+use Fortune\Validator\ResourceValidatorInterface;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidator $validator)
+    function let(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator)
     {
         $this->beConstructedWith($repository, $serializer, $output, $validator);
     }

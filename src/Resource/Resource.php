@@ -5,7 +5,7 @@ namespace Fortune\Resource;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\Output\OutputInterface;
-use Fortune\Validator\ResourceValidator;
+use Fortune\Validator\ResourceValidatorInterface;
 
 class Resource
 {
@@ -19,7 +19,7 @@ class Resource
 
     protected $resources;
 
-    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidator $validator)
+    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator)
     {
         $this->repository = $repository;
         $this->serializer = $serializer;
