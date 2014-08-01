@@ -7,12 +7,13 @@ use Prophecy\Argument;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\Output\OutputInterface;
+use Fortune\Validator\ResourceValidator;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    function let(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidator $validator)
     {
-        $this->beConstructedWith($repository, $serializer, $output);
+        $this->beConstructedWith($repository, $serializer, $output, $validator);
     }
 
     function it_is_initializable()
@@ -20,7 +21,7 @@ class ResourceSpec extends ObjectBehavior
         $this->shouldHaveType('Fortune\Resource\Resource');
     }
 
-    function its_index_method_should_return_json_array_with_all_of_a_resource(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    function its_index_method_should_return_json_array_with_all_of_a_resource($repository, $serializer, $output)
     {
         $repository->findAll()->shouldBeCalled()->willReturn($resources = array('foo'));
 
@@ -31,7 +32,7 @@ class ResourceSpec extends ObjectBehavior
         $this->index()->shouldReturn('response');
     }
 
-    function its_show_method_should_return_a_single_json_resource_object(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    function its_show_method_should_return_a_single_json_resource_object($repository, $serializer, $output)
     {
         $repository->find(1)->shouldBeCalled()->willReturn($resource = 'foo');;
 
@@ -42,8 +43,10 @@ class ResourceSpec extends ObjectBehavior
         $this->show(1)->shouldReturn('response');
     }
 
-    function its_create_method_can_create_a_new_resource_and_return_its_json_serialization(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    function its_create_method_can_create_a_new_resource_and_return_its_json_serialization($repository, $serializer, $output, $validator)
     {
+        $validator->validate(['input'])->shouldBeCalled()->willReturn(true);
+
         $repository->create(['input'])->shouldBeCalled()->willReturn($resource = 'foo');
 
         $serializer->serialize($resource)->shouldBeCalled()->willReturn('serialized');
@@ -53,7 +56,7 @@ class ResourceSpec extends ObjectBehavior
         $this->create(array('input'))->shouldReturn('response');
     }
 
-    function its_update_method_can_update_existing_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, OutputInterface $output)
+    function its_update_method_can_update_existing_resource_and_doesnt_return_content($repository, $output)
     {
         $repository->update(1, ['input'])->shouldBeCalled()->willReturn($resource = 'foo');
 
@@ -62,7 +65,7 @@ class ResourceSpec extends ObjectBehavior
         $this->update(1, ['input'])->shouldReturn('response');
     }
 
-    function its_delete_method_can_delete_resource_and_doesnt_return_content(ResourceRepositoryInterface $repository, OutputInterface $output)
+    function its_delete_method_can_delete_resource_and_doesnt_return_content($repository, $output)
     {
         $repository->delete(1)->shouldBeCalled();
 
@@ -71,12 +74,21 @@ class ResourceSpec extends ObjectBehavior
         $this->delete(1);
     }
 
-    function it_should_throw_404_when_resource_not_found(ResourceRepositoryInterface $repository, OutputInterface $output)
+    function it_should_throw_404_when_resource_not_found($repository, $output)
     {
         $repository->find(1)->shouldBeCalled()->willReturn(null);
 
         $output->response(null, 404)->shouldBeCalled()->willReturn('response');
 
         $this->show(1);
+    }
+
+    function it_should_throw_400_with_bad_input($validator, $output)
+    {
+        $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
+
+        $output->response(null, 400)->shouldBeCalled()->willReturn('response');
+
+        $this->create(['input']);
     }
 }

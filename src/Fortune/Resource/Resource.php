@@ -5,6 +5,7 @@ namespace Fortune\Resource;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\Output\OutputInterface;
+use Fortune\Validator\ResourceValidator;
 
 class Resource
 {
@@ -14,13 +15,16 @@ class Resource
 
     protected $output;
 
+    protected $validator;
+
     protected $resources;
 
-    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output)
+    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidator $validator)
     {
         $this->repository = $repository;
         $this->serializer = $serializer;
         $this->output = $output;
+        $this->validator = $validator;
     }
 
     public function index()
@@ -41,6 +45,10 @@ class Resource
 
     public function create(array $input)
     {
+        if (!$this->validator->validate($input)) {
+            return $this->response(400);
+        }
+
         $this->resources = $this->repository->create($input);
 
         return $this->response(201);

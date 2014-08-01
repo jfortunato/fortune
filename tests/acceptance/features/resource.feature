@@ -47,3 +47,14 @@ Feature: Resource
         Then The response code should be 204
         When I send a GET request to "/dogs/1"
         Then The response code should be 404
+
+    Scenario: Getting Not Found error when dog doesn't exist
+        When I send a GET request to "/dogs/3"
+        Then The response code should be 404
+
+    Scenario: Getting Bad Input error when creating new dog with bad parameters
+        Given I send the following parameters:
+            | foo |
+            | bar |
+        When I send a POST request to "/dogs"
+        Then The response code should be 400

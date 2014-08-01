@@ -7,7 +7,8 @@ $uri = $_SERVER['REQUEST_URI'];
 $repository = new Fortune\Repository\Driver\DoctrineResourceRepository($container['doctrine'], 'Fortune\Test\Entity\Dog');
 $serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build());
 $output = new Fortune\Output\Driver\SimpleOutput;
-$resource = new Fortune\Resource\Resource($repository, $serializer, $output);
+$validator = new Fortune\Test\Validator\DogValidator;
+$resource = new Fortune\Resource\Resource($repository, $serializer, $output, $validator);
 
 // routing is out of the scope of this library
 if ($uri === '/dogs') {
