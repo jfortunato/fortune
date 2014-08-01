@@ -19,7 +19,9 @@
         "behat/common-contexts": "~1.0"
     },
     "autoload": {
-        "psr-0": { "": "src/" },
-        "psr-4": { "Fortune\\Test\\": "tests/acceptance/bootstrap/src/" }
+        "psr-4": {
+            "Fortune\\": "src/",
+            "Fortune\\Test\\": "tests/acceptance/bootstrap/src/"
+        }
     }
 }
