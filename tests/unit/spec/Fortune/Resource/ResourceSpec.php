@@ -56,8 +56,10 @@ class ResourceSpec extends ObjectBehavior
         $this->create(array('input'))->shouldReturn('response');
     }
 
-    function its_update_method_can_update_existing_resource_and_doesnt_return_content($repository, $output)
+    function its_update_method_can_update_existing_resource_and_doesnt_return_content($repository, $output, $validator)
     {
+        $validator->validate(['input'])->shouldBeCalled()->willReturn(true);
+
         $repository->update(1, ['input'])->shouldBeCalled()->willReturn($resource = 'foo');
 
         $output->response(null, 204)->shouldBeCalled()->willReturn('response');;
@@ -83,12 +85,21 @@ class ResourceSpec extends ObjectBehavior
         $this->show(1);
     }
 
-    function it_should_throw_400_with_bad_input($validator, $output)
+    function its_create_method_should_throw_400_with_bad_input($validator, $output)
     {
         $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
 
         $output->response(null, 400)->shouldBeCalled()->willReturn('response');
 
         $this->create(['input']);
+    }
+
+    function its_update_method_should_throw_400_with_bad_input($validator, $output)
+    {
+        $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
+
+        $output->response(null, 400)->shouldBeCalled()->willReturn('response');
+
+        $this->update(1, ['input']);
     }
 }

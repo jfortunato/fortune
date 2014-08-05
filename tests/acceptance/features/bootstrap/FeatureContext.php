@@ -27,5 +27,6 @@ class FeatureContext extends BehatContext
     {
         $this->useContext('ResourceContext', new ResourceContext);
         $this->useContext('ValitronContext', new ValitronContext);
+        $this->useContext('DoctrineContext', new DoctrineContext);
     }
 }

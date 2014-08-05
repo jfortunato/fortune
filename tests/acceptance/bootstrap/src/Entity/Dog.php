@@ -26,6 +26,16 @@ class Dog
     private $name;
 
     /**
+     * Gets the value of id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
      * Gets the value of name
      *
      * @return string

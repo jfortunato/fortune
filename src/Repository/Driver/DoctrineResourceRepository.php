@@ -30,7 +30,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     public function create(array $input)
     {
         $resource = new $this->resourceClass;
-        $resource->setName($input['name']);
+        $this->fillAttributes($resource, $input);
 
         $this->manager->persist($resource);
         $this->manager->flush();
@@ -41,7 +41,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     public function update($id, array $input)
     {
         $resource = $this->find($id);
-        $resource->setName($input['name']);
+        $this->fillAttributes($resource, $input);
 
         $this->manager->persist($resource);
         $this->manager->flush();
@@ -55,5 +55,16 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
 
         $this->manager->remove($resource);
         $this->manager->flush();
+    }
+
+    protected function fillAttributes($resource, $attributes)
+    {
+        foreach ($attributes as $attribute => $value) {
+            $setter = "set" . ucfirst($attribute);
+
+            if (method_exists($resource, $setter)) {
+                $resource->$setter($value);
+            }
+        }
     }
 }

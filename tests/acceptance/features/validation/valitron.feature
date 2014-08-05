@@ -1,4 +1,4 @@
-@valitron
+@validation.valitron
 Feature: Valitron Validation
     In order to validate input with valitron
     As a user of the valitron driver
