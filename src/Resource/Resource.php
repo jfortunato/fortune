@@ -56,6 +56,10 @@ class Resource
 
     public function update($id, array $input)
     {
+        if (!$this->repository->find($id)) {
+            return $this->response(404);
+        }
+
         if (!$this->validator->validate($input)) {
             return $this->response(400);
         }

@@ -52,7 +52,14 @@ Feature: Resource
         When I send a GET request to "/dogs/3"
         Then The response code should be 404
 
-    Scenario: Getting Bad Input error when creating new dog with bad parameters
+    Scenario: Getting Not Found error when trying to update dog that doesnt exist
+        Given I send the following parameters:
+            | name  |
+            | Lucca |
+        When I send a PUT request to "/dogs/3"
+        Then The response code should be 404
+
+    Scenario: Getting Bad Request error when creating new dog with bad parameters
         Given I send the following parameters:
             | foo |
             | bar |
