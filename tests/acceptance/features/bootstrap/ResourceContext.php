@@ -14,6 +14,8 @@ class ResourceContext extends BaseContext
 
     protected $query = array();
 
+    protected $body = array();
+
     protected $headers = array();
 
     public function __construct(array $parameters = array())
@@ -48,12 +50,16 @@ class ResourceContext extends BaseContext
         $method = strtolower($method);
 
         $this->response = $this->client->$method($url, [
-            'body' => $this->query,
+            'query' => $this->query,
+            'body' => $this->body,
             'headers' => $this->headers,
         ]);
 
+
         // reset query params in case we make another request
         $this->query = array();
+        $this->body = array();
+        $this->headers = array();
     }
 
     /**
@@ -79,7 +85,7 @@ class ResourceContext extends BaseContext
             $value = $value->getHash();
         }
 
-        $this->query[$parameter] = $value;
+        $this->body[$parameter] = $value;
     }
 
     /**
@@ -88,6 +94,14 @@ class ResourceContext extends BaseContext
     public function theResponseCodeShouldBe($code)
     {
         assertEquals($code, $this->response->getStatusCode());
+    }
+
+    /**
+     * @Then /^The response code should not be (\d+)$/
+     */
+    public function theResponseCodeShouldNotBe($code)
+    {
+        assertNotEquals($code, $this->response->getStatusCode());
     }
 
     /**
@@ -131,5 +145,31 @@ class ResourceContext extends BaseContext
         }
 
         return $dog;
+    }
+
+    /**
+     * @Given /^I am not logged in$/
+     */
+    public function iAmNotLoggedIn()
+    {
+        assertFalse(isset($_SESSION['username']));
+    }
+
+    /**
+     * @Given /^I am logged in$/
+     */
+    public function iAmLoggedIn()
+    {
+        $this->query['doLogin'] = true;
+    }
+
+    /**
+     * @Given /^The "([^"]*)" entity requires authentication$/
+     */
+    public function theEntityRequiresAuthentication($entity)
+    {
+        // we need to change a static variable at application runtime
+        // and we cant do that here so set a flag for the request to handle it
+        $this->query['requiresAuthentication'] = true;
     }
 }

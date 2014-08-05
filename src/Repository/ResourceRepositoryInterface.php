@@ -9,4 +9,5 @@ interface ResourceRepositoryInterface
     public function create(array $input);
     public function update($id, array $input);
     public function delete($id);
+    public function getClassName();
 }

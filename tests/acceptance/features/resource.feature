@@ -65,3 +65,35 @@ Feature: Resource
             | bar |
         When I send a POST request to "/dogs"
         Then The response code should be 400
+
+    Scenario Outline: Getting Access Denied error when login is required
+        Given I am not logged in
+        And The "Fortune\Test\Entity\Dog" entity requires authentication
+        When I send a <method> request to "<url>"
+        Then The response code should be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |
+
+    Scenario Outline: Not getting Access Denied error when login is required and we are logged in
+        Given I am logged in
+        And The "Fortune\Test\Entity\Dog" entity requires authentication
+        When I send a <method> request to "<url>"
+        Then The response code should not be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |
+
+    #Scenario: Getting Access Denied error when default acl role is required
+        #Given I have the role "anonymous"
+        #And The "dogs" resource requires role "admin"
+        #When I send a GET request to "/dogs"
+        #Then The response code should be 403

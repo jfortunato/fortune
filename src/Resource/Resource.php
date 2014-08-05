@@ -6,6 +6,7 @@ use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\Output\OutputInterface;
 use Fortune\Validator\ResourceValidatorInterface;
+use Fortune\Security\SecurityInterface;
 
 class Resource
 {
@@ -19,16 +20,23 @@ class Resource
 
     protected $resources;
 
-    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator)
+    protected $security;
+
+    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator, SecurityInterface $security)
     {
         $this->repository = $repository;
         $this->serializer = $serializer;
         $this->output = $output;
         $this->validator = $validator;
+        $this->security = $security;
     }
 
     public function index()
     {
+        if (!$this->security->isAllowed($this->repository->getClassName())) {
+            return $this->response(403);
+        }
+
         $this->resources = $this->repository->findAll();
 
         return $this->response(200);
@@ -36,6 +44,10 @@ class Resource
 
     public function show($id)
     {
+        if (!$this->security->isAllowed($this->repository->getClassName())) {
+            return $this->response(403);
+        }
+
         $this->resources = $this->repository->find($id);
 
         $code = $this->resources ? 200:404;
@@ -45,6 +57,10 @@ class Resource
 
     public function create(array $input)
     {
+        if (!$this->security->isAllowed($this->repository->getClassName())) {
+            return $this->response(403);
+        }
+
         if (!$this->validator->validate($input)) {
             return $this->response(400);
         }
@@ -56,6 +72,10 @@ class Resource
 
     public function update($id, array $input)
     {
+        if (!$this->security->isAllowed($this->repository->getClassName())) {
+            return $this->response(403);
+        }
+
         if (!$this->repository->find($id)) {
             return $this->response(404);
         }
@@ -71,6 +91,10 @@ class Resource
 
     public function delete($id)
     {
+        if (!$this->security->isAllowed($this->repository->getClassName())) {
+            return $this->response(403);
+        }
+
         $this->repository->delete($id);
 
         return $this->response(204);

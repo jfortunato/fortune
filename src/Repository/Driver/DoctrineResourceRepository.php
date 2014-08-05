@@ -57,6 +57,11 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         $this->manager->flush();
     }
 
+    public function getClassName()
+    {
+        return $this->resourceClass;
+    }
+
     protected function fillAttributes($resource, $attributes)
     {
         foreach ($attributes as $attribute => $value) {

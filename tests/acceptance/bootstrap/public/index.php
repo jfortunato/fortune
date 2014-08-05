@@ -8,16 +8,24 @@ $repository = new Fortune\Repository\Driver\DoctrineResourceRepository($containe
 $serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build());
 $output = new Fortune\Output\Driver\SimpleOutput;
 $validator = new Fortune\Test\Validator\DogValidator;
-$resource = new Fortune\Resource\Resource($repository, $serializer, $output, $validator);
+$security = new Fortune\Security\Driver\SimpleAuthenticationBouncer(new Fortune\Security\ResourceInspector);
+$resource = new Fortune\Resource\Resource($repository, $serializer, $output, $validator, $security);
+
+if (isset($_SERVER['QUERY_STRING'])) {
+    $query = $_SERVER['QUERY_STRING'];
+
+    if (strstr($query, 'requiresAuthentication')) {
+        $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
+        $reflectionClass->setStaticPropertyValue('requiresAuthentication', true);
+    }
+
+    if (strstr($query, 'doLogin')) {
+        $_SESSION['username'] = 'foo';
+    }
+}
 
 // routing is out of the scope of this library
-if ($uri === '/dogs') {
-    if ($_SERVER['REQUEST_METHOD'] === "GET") {
-        echo $resource->index();
-    } else if ($_SERVER['REQUEST_METHOD'] === "POST") {
-        echo $resource->create($_POST);
-    }
-} else if (preg_match('/^\/dogs\/(\d)$/', $uri, $id)) {
+if (preg_match('/^\/dogs\/(\d)/', $uri, $id)) {
     if ($_SERVER['REQUEST_METHOD'] === "GET") {
         echo $resource->show($id[1]);
     } else if ($_SERVER['REQUEST_METHOD'] === "PUT") {
@@ -25,5 +33,11 @@ if ($uri === '/dogs') {
         echo $resource->update($id[1], $input);
     } else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
         echo $resource->delete($id[1]);
+    }
+} else {
+    if ($_SERVER['REQUEST_METHOD'] === "GET") {
+        echo $resource->index();
+    } else if ($_SERVER['REQUEST_METHOD'] === "POST") {
+        echo $resource->create($_POST);
     }
 }

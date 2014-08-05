@@ -14,6 +14,8 @@ use Doctrine\ORM\Mapping\GeneratedValue;
  */
 class Dog
 {
+    public static $requiresAuthentication = false;
+
     /**
      * @Id @Column(type="integer")
      * @GeneratedValue
