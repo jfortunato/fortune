@@ -6,8 +6,8 @@ abstract class AuthenticationBouncer extends Bouncer
 {
     abstract public function isAuthenticated();
 
-    public function check($entityClass)
+    public function check($entityOrClass)
     {
-        return $this->inspector->requiresAuthentication($entityClass) ? $this->isAuthenticated():true;
+        return $this->inspector->requiresAuthentication($this->getEntityClass($entityOrClass)) ? $this->isAuthenticated():true;
     }
 }

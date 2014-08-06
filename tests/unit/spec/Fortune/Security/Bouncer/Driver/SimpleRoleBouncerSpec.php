@@ -13,6 +13,13 @@ class SimpleRoleBouncerSpec extends ObjectBehavior
         $this->beConstructedWith($inspector);
     }
 
+    function letgo()
+    {
+        if (isset($_SESSION['role'])) {
+            unset($_SESSION['role']);
+        }
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Fortune\Security\Bouncer\Driver\SimpleRoleBouncer');

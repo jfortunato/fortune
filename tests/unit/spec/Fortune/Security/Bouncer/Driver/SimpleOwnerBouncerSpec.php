@@ -6,7 +6,7 @@ use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Fortune\Security\ResourceInspectorInterface;
 
-class SimpleAuthenticationBouncerSpec extends ObjectBehavior
+class SimpleOwnerBouncerSpec extends ObjectBehavior
 {
     function let(ResourceInspectorInterface $inspector)
     {
@@ -22,26 +22,26 @@ class SimpleAuthenticationBouncerSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer');
+        $this->shouldHaveType('Fortune\Security\Bouncer\Driver\SimpleOwnerBouncer');
     }
 
-    function it_should_allow_if_no_auth_required($inspector)
+    function it_should_allow_if_owner_not_required($inspector)
     {
-        $inspector->requiresAuthentication('Foo\Bar')->shouldBeCalled()->willReturn(false);
+        $inspector->requiresOwner('Foo\Bar')->shouldBeCalled()->willReturn(false);
 
         $this->check('Foo\Bar')->shouldReturn(true);
     }
 
-    function it_should_deny_if_auth_required_and_user_not_authenticated($inspector)
+    function it_should_deny_if_owner_required_and_we_are_not_the_owner($inspector)
     {
-        $inspector->requiresAuthentication('Foo\Bar')->shouldBeCalled()->willReturn(true);
+        $inspector->requiresOwner('Foo\Bar')->shouldBeCalled()->willReturn(true);
 
         $this->check('Foo\Bar')->shouldReturn(false);
     }
 
-    function it_should_allow_if_auth_required_and_user_authenticated($inspector)
+    function it_should_allow_if_owner_required_and_we_are_the_owner($inspector)
     {
-        $inspector->requiresAuthentication('Foo\Bar')->shouldBeCalled()->willReturn(true);
+        $inspector->requiresOwner('Foo\Bar')->shouldBeCalled()->willReturn(true);
 
         $_SESSION['username'] = 'foo';
 

@@ -20,6 +20,11 @@ if (isset($_GET['requiresRole'])) {
     $reflectionClass->setStaticPropertyValue('requiresRole', $_GET['requiresRole']);
 }
 
+if (isset($_GET['requiresOwner'])) {
+    $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
+    $reflectionClass->setStaticPropertyValue('requiresOwner', true);
+}
+
 parse_str($app->request->getBody(), $input);
 $resource = $app->resource;
 

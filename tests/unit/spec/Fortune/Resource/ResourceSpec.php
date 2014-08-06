@@ -41,9 +41,9 @@ class ResourceSpec extends ObjectBehavior
     {
         $repository->getClassName()->willReturn('Foo\Bar');
 
-        $security->isAllowed('Foo\Bar')->willReturn(true);
-
         $repository->find(1)->shouldBeCalled()->willReturn($resource = 'foo');;
+
+        $security->isAllowed('foo')->willReturn(true);
 
         $serializer->serialize($resource)->shouldBeCalled()->willReturn('serialized');
 
@@ -73,9 +73,9 @@ class ResourceSpec extends ObjectBehavior
     {
         $repository->getClassName()->willReturn('Foo\Bar');
 
-        $security->isAllowed('Foo\Bar')->willReturn(true);
-
         $repository->find(1)->shouldBeCalled()->willReturn($resource = 'foo');
+
+        $security->isAllowed('foo')->willReturn(true);
 
         $validator->validate(['input'])->shouldBeCalled()->willReturn(true);
 
@@ -88,9 +88,9 @@ class ResourceSpec extends ObjectBehavior
 
     function its_delete_method_can_delete_resource_and_doesnt_return_content($repository, $output, $security)
     {
-        $repository->getClassName()->willReturn('Foo\Bar');
+        $repository->find(1)->willReturn('foo');
 
-        $security->isAllowed('Foo\Bar')->willReturn(true);
+        $security->isAllowed('foo')->willReturn(true);
 
         $repository->delete(1)->shouldBeCalled();
 
@@ -140,9 +140,7 @@ class ResourceSpec extends ObjectBehavior
 
     function its_update_method_should_throw_400_with_bad_input($repository, $validator, $output, $security)
     {
-        $repository->getClassName()->willReturn('Foo\Bar');
-
-        $security->isAllowed('Foo\Bar')->willReturn(true);
+        $security->isAllowed('foo')->willReturn(true);
 
         $repository->find(1)->shouldBeCalled()->willReturn($resource = 'foo');
 
@@ -166,9 +164,9 @@ class ResourceSpec extends ObjectBehavior
 
     function its_show_method_should_deny_access_to_resource_with_security($repository, $security, $output)
     {
-        $repository->getClassName()->shouldBeCalled()->willReturn('Foo\Bar');
+        $repository->find(1)->shouldBeCalled()->willReturn('foo');
 
-        $security->isAllowed('Foo\Bar')->shouldBeCalled()->willReturn(false);
+        $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
         $output->response(null, 403)->shouldBeCalled()->willReturn('response');
 
@@ -188,9 +186,9 @@ class ResourceSpec extends ObjectBehavior
 
     function its_update_method_should_deny_access_to_resource_with_security($repository, $security, $output)
     {
-        $repository->getClassName()->shouldBeCalled()->willReturn('Foo\Bar');
+        $repository->find(1)->shouldBeCalled()->willReturn('foo');
 
-        $security->isAllowed('Foo\Bar')->shouldBeCalled()->willReturn(false);
+        $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
         $output->response(null, 403)->shouldBeCalled()->willReturn('response');
 
@@ -199,9 +197,9 @@ class ResourceSpec extends ObjectBehavior
 
     function its_delete_method_should_deny_access_to_resource_with_security($repository, $security, $output)
     {
-        $repository->getClassName()->shouldBeCalled()->willReturn('Foo\Bar');
+        $repository->find(1)->shouldBeCalled()->willReturn('foo');
 
-        $security->isAllowed('Foo\Bar')->shouldBeCalled()->willReturn(false);
+        $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
         $output->response(null, 403)->shouldBeCalled()->willReturn('response');
 

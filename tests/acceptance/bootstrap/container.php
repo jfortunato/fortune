@@ -13,6 +13,7 @@ use Fortune\Security\Security;
 use Fortune\Security\ResourceInspector;
 use Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer;
 use Fortune\Security\Bouncer\Driver\SimpleRoleBouncer;
+use Fortune\Security\Bouncer\Driver\SimpleOwnerBouncer;
 use Fortune\Resource\Resource;
 
 $app->container->singleton('doctrine', function ()
@@ -69,11 +70,17 @@ $app->roleBouncer = function ($app)
     return new SimpleRoleBouncer($app->inspector);
 };
 
+$app->ownerBouncer = function ($app)
+{
+    return new SimpleOwnerBouncer($app->inspector);
+};
+
 $app->security = function ($app)
 {
     return new Security(
         $app->authBouncer,
-        $app->roleBouncer
+        $app->roleBouncer,
+        $app->ownerBouncer
     );
 };
 

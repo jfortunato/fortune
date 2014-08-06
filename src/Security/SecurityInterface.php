@@ -4,5 +4,5 @@ namespace Fortune\Security;
 
 interface SecurityInterface
 {
-    public function isAllowed($entityClass);
+    public function isAllowed($entityOrClass);
 }

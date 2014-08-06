@@ -44,11 +44,11 @@ class Resource
 
     public function show($id)
     {
-        if (!$this->security->isAllowed($this->repository->getClassName())) {
+        $this->resources = $this->repository->find($id);
+
+        if (!$this->security->isAllowed($this->resources ?: $this->repository->getClassName())) {
             return $this->response(403);
         }
-
-        $this->resources = $this->repository->find($id);
 
         $code = $this->resources ? 200:404;
 
@@ -72,11 +72,13 @@ class Resource
 
     public function update($id, array $input)
     {
-        if (!$this->security->isAllowed($this->repository->getClassName())) {
+        $resource = $this->repository->find($id);
+
+        if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
             return $this->response(403);
         }
 
-        if (!$this->repository->find($id)) {
+        if (!$resource) {
             return $this->response(404);
         }
 
@@ -91,7 +93,9 @@ class Resource
 
     public function delete($id)
     {
-        if (!$this->security->isAllowed($this->repository->getClassName())) {
+        $resource = $this->repository->find($id);
+
+        if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
             return $this->response(403);
         }
 

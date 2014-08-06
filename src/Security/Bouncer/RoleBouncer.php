@@ -6,9 +6,9 @@ abstract class RoleBouncer extends Bouncer
 {
     abstract public function hasRole($role);
 
-    public function check($entityClass)
+    public function check($entityOrClass)
     {
-        $role = $this->inspector->requiredRole($entityClass);
+        $role = $this->inspector->requiredRole($this->getEntityClass($entityOrClass));
 
         return $role ? $this->hasRole($role):true;
     }

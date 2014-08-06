@@ -6,4 +6,5 @@ interface ResourceInspectorInterface
 {
     public function requiresAuthentication($entityClass);
     public function requiredRole($entityClass);
+    public function requiresOwner($entityClass);
 }

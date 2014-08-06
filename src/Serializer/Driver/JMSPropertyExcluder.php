@@ -12,6 +12,7 @@ class JMSPropertyExcluder implements ExclusionStrategyInterface
     protected $skip = array(
         'requiresAuthentication',
         'requiresRole',
+        'requiresOwner',
     );
 
     public function shouldSkipClass(ClassMetadata $metadata, Context $context)

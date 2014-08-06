@@ -204,4 +204,12 @@ class ResourceContext extends BaseContext
     {
         $this->query['requiresRole'] = $role;
     }
+
+    /**
+     * @Given /^The "([^"]*)" resource requires owner for access$/
+     */
+    public function theResourceRequiresOwnerForAccess($entity)
+    {
+        $this->query['requiresOwner'] = true;
+    }
 }
