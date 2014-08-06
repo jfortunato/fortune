@@ -5,7 +5,7 @@ require_once __DIR__ . '/../bootstrap.php';
 $uri = $_SERVER['REQUEST_URI'];
 
 $repository = new Fortune\Repository\Driver\DoctrineResourceRepository($container['doctrine'], 'Fortune\Test\Entity\Dog');
-$serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build());
+$serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build(), new JMS\Serializer\SerializationContext, new Fortune\Serializer\Driver\JMSPropertyExcluder);
 $output = new Fortune\Output\Driver\SimpleOutput;
 $validator = new Fortune\Test\Validator\DogValidator;
 $inspector = new Fortune\Security\ResourceInspector;

@@ -121,6 +121,14 @@ class ResourceContext extends BaseContext
         $this->assertArrayContainsArray(json_decode($json, true), $this->response->json());
     }
 
+    /**
+     * @Then /^The response should not contain key "([^"]*)"$/
+     */
+    public function theResponseShouldNotContainKey($key)
+    {
+        assertArrayNotHasKey($key, $this->response->json());
+    }
+
     protected function assertArrayContainsArray(array $needle, array $haystack)
     {
         foreach ($needle as $key => $value) {
