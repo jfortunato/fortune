@@ -2,16 +2,6 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
-$uri = $_SERVER['REQUEST_URI'];
-
-$repository = new Fortune\Repository\Driver\DoctrineResourceRepository($container['doctrine'], 'Fortune\Test\Entity\Dog');
-$serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build(), new JMS\Serializer\SerializationContext, new Fortune\Serializer\Driver\JMSPropertyExcluder);
-$output = new Fortune\Output\Driver\SimpleOutput;
-$validator = new Fortune\Test\Validator\DogValidator;
-$inspector = new Fortune\Security\ResourceInspector;
-$security = new Fortune\Security\Security(new Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer($inspector), new Fortune\Security\Bouncer\Driver\SimpleRoleBouncer($inspector));
-$resource = new Fortune\Resource\Resource($repository, $serializer, $output, $validator, $security);
-
 if (isset($_GET['requiresAuthentication'])) {
     $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
     $reflectionClass->setStaticPropertyValue('requiresAuthentication', true);
@@ -30,20 +20,32 @@ if (isset($_GET['requiresRole'])) {
     $reflectionClass->setStaticPropertyValue('requiresRole', $_GET['requiresRole']);
 }
 
-// routing is out of the scope of this library
-if (preg_match('/^\/dogs\/(\d)/', $uri, $id)) {
-    if ($_SERVER['REQUEST_METHOD'] === "GET") {
-        echo $resource->show($id[1]);
-    } else if ($_SERVER['REQUEST_METHOD'] === "PUT") {
-        parse_str(file_get_contents("php://input"), $input);
-        echo $resource->update($id[1], $input);
-    } else if ($_SERVER['REQUEST_METHOD'] === "DELETE") {
-        echo $resource->delete($id[1]);
-    }
-} else {
-    if ($_SERVER['REQUEST_METHOD'] === "GET") {
-        echo $resource->index();
-    } else if ($_SERVER['REQUEST_METHOD'] === "POST") {
-        echo $resource->create($_POST);
-    }
-}
+parse_str($app->request->getBody(), $input);
+$resource = $app->resource;
+
+$app->get('/dogs', function () use ($resource)
+{
+    echo $resource->index();
+});
+
+$app->post('/dogs', function () use ($resource, $input)
+{
+    echo $resource->create($input);
+});
+
+$app->get('/dogs/:id', function ($id) use ($resource)
+{
+    echo $resource->show($id);
+});
+
+$app->put('/dogs/:id', function ($id) use ($resource, $input)
+{
+    echo $resource->update($id, $input);
+});
+
+$app->delete('/dogs/:id', function ($id) use ($resource)
+{
+    echo $resource->delete($id);
+});
+
+$app->run();
