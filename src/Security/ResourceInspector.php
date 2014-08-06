@@ -10,4 +10,11 @@ class ResourceInspector implements ResourceInspectorInterface
 
         return $reflectionClass->getStaticPropertyValue('requiresAuthentication', false);
     }
+
+    public function requiredRole($entityClass)
+    {
+        $reflectionClass = new \ReflectionClass($entityClass);
+
+        return $reflectionClass->getStaticPropertyValue('requiresRole', null);
+    }
 }

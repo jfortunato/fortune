@@ -92,8 +92,44 @@ Feature: Resource
             | PUT    | /dogs/1 |
             | DELETE | /dogs/1 |
 
-    #Scenario: Getting Access Denied error when default acl role is required
-        #Given I have the role "anonymous"
-        #And The "dogs" resource requires role "admin"
-        #When I send a GET request to "/dogs"
-        #Then The response code should be 403
+    Scenario Outline: Getting Access Denied error when role is required and we have no role
+        Given I am logged in
+        But I dont have a role
+        And The "Fortune\Test\Entity\Dog" resource requires role "admin"
+        When I send a <method> request to "<url>"
+        Then The response code should be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |
+
+    Scenario Outline: Getting Access Denied error when role is required and we have different role
+        Given I am logged in
+        And I have the role "foo"
+        And The "Fortune\Test\Entity\Dog" resource requires role "admin"
+        When I send a <method> request to "<url>"
+        Then The response code should be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |
+
+    Scenario Outline: Not getting Access Denied error when role is required and we have that role
+        Given I am logged in
+        And I have the role "admin"
+        And The "Fortune\Test\Entity\Dog" resource requires role "admin"
+        When I send a <method> request to "<url>"
+        Then The response code should not be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |

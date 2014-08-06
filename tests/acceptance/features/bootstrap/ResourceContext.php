@@ -172,4 +172,28 @@ class ResourceContext extends BaseContext
         // and we cant do that here so set a flag for the request to handle it
         $this->query['requiresAuthentication'] = true;
     }
+
+    /**
+     * @Given /^I have the role "([^"]*)"$/
+     */
+    public function iHaveTheRole($role)
+    {
+        $this->query['haveRole'] = $role;
+    }
+
+    /**
+     * @Given /^I dont have a role$/
+     */
+    public function iDontHaveARole()
+    {
+        assertFalse(isset($_SESSION['role']));
+    }
+
+    /**
+     * @Given /^The "[^"]*" resource requires role "([^"]*)"$/
+     */
+    public function theResourceRequiresRole($role)
+    {
+        $this->query['requiresRole'] = $role;
+    }
 }

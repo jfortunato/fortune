@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Fortune\Security\Driver;
+namespace spec\Fortune\Security\Bouncer\Driver;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -15,26 +15,21 @@ class SimpleAuthenticationBouncerSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Fortune\Security\Driver\SimpleAuthenticationBouncer');
-    }
-
-    function it_should_implement_securityinterface()
-    {
-        $this->shouldImplement('Fortune\Security\SecurityInterface');
+        $this->shouldHaveType('Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer');
     }
 
     function it_should_allow_if_no_auth_required($inspector)
     {
         $inspector->requiresAuthentication('Foo\Bar')->shouldBeCalled()->willReturn(false);
 
-        $this->isAllowed('Foo\Bar')->shouldReturn(true);
+        $this->check('Foo\Bar')->shouldReturn(true);
     }
 
     function it_should_deny_if_auth_required_and_user_not_authenticated($inspector)
     {
         $inspector->requiresAuthentication('Foo\Bar')->shouldBeCalled()->willReturn(true);
 
-        $this->isAllowed('Foo\Bar')->shouldReturn(false);
+        $this->check('Foo\Bar')->shouldReturn(false);
     }
 
     function it_should_allow_if_auth_required_and_user_authenticated($inspector)
@@ -43,6 +38,6 @@ class SimpleAuthenticationBouncerSpec extends ObjectBehavior
 
         $_SESSION['username'] = 'foo';
 
-        $this->isAllowed('Foo\Bar')->shouldReturn(true);
+        $this->check('Foo\Bar')->shouldReturn(true);
     }
 }

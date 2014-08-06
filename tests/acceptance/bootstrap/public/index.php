@@ -8,20 +8,26 @@ $repository = new Fortune\Repository\Driver\DoctrineResourceRepository($containe
 $serializer = new Fortune\Serializer\Driver\JMSSerializer(JMS\Serializer\SerializerBuilder::create()->build());
 $output = new Fortune\Output\Driver\SimpleOutput;
 $validator = new Fortune\Test\Validator\DogValidator;
-$security = new Fortune\Security\Driver\SimpleAuthenticationBouncer(new Fortune\Security\ResourceInspector);
+$inspector = new Fortune\Security\ResourceInspector;
+$security = new Fortune\Security\Security(new Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer($inspector), new Fortune\Security\Bouncer\Driver\SimpleRoleBouncer($inspector));
 $resource = new Fortune\Resource\Resource($repository, $serializer, $output, $validator, $security);
 
-if (isset($_SERVER['QUERY_STRING'])) {
-    $query = $_SERVER['QUERY_STRING'];
+if (isset($_GET['requiresAuthentication'])) {
+    $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
+    $reflectionClass->setStaticPropertyValue('requiresAuthentication', true);
+}
 
-    if (strstr($query, 'requiresAuthentication')) {
-        $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
-        $reflectionClass->setStaticPropertyValue('requiresAuthentication', true);
-    }
+if (isset($_GET['doLogin'])) {
+    $_SESSION['username'] = 'foo';
+}
 
-    if (strstr($query, 'doLogin')) {
-        $_SESSION['username'] = 'foo';
-    }
+if (isset($_GET['haveRole'])) {
+    $_SESSION['role'] = $_GET['haveRole'];
+}
+
+if (isset($_GET['requiresRole'])) {
+    $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
+    $reflectionClass->setStaticPropertyValue('requiresRole', $_GET['requiresRole']);
 }
 
 // routing is out of the scope of this library

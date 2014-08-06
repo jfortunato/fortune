@@ -1,8 +1,8 @@
 <?php
 
-namespace Fortune\Security\Driver;
+namespace Fortune\Security\Bouncer\Driver;
 
-use Fortune\Security\AuthenticationBouncer;
+use Fortune\Security\Bouncer\AuthenticationBouncer;
 
 class SimpleAuthenticationBouncer extends AuthenticationBouncer
 {
