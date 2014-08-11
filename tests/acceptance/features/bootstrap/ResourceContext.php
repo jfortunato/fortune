@@ -20,6 +20,8 @@ class ResourceContext extends BaseContext
 
     public function __construct(array $parameters = array())
     {
+        parent::__construct();
+
         $this->client = new Guzzle([
             'base_url' => 'http://localhost:8000',
             'defaults' => [
@@ -144,12 +146,12 @@ class ResourceContext extends BaseContext
 
     public function thereIsDog($id = null, array $dogExtra = array())
     {
-        if (null === $dog = $this->manager->getRepository('Fortune\Test\Entity\Dog')->findOneBy(array('id' => $id))) {
+        if (null === $dog = $this->getManager()->getRepository('Fortune\Test\Entity\Dog')->findOneBy(array('id' => $id))) {
             $dog = new Fortune\Test\Entity\Dog;
             $dog->setName($dogExtra['name']);
 
-            $this->manager->persist($dog);
-            $this->manager->flush();
+            $this->getManager()->persist($dog);
+            $this->getManager()->flush();
         }
 
         return $dog;

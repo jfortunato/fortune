@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../../../_bootstrap/bootstrap.php';
+
+$container = new Fortune\Test\Container;
 
 if (isset($_GET['requiresAuthentication'])) {
     $reflectionClass = new \ReflectionClass('Fortune\Test\Entity\Dog');
@@ -25,6 +27,7 @@ if (isset($_GET['requiresOwner'])) {
     $reflectionClass->setStaticPropertyValue('requiresOwner', true);
 }
 
+$app = $container->getSlim();
 parse_str($app->request->getBody(), $input);
 $resource = $app->resource;
 

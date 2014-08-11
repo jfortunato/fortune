@@ -2,14 +2,20 @@
 
 use Behat\Behat\Context\BehatContext;
 use Doctrine\ORM\Tools\SchemaTool;
+use Fortune\Test\Container;
 
-abstract class BaseContext extends BehatContext implements DoctrineAwareInterface
+abstract class BaseContext extends BehatContext
 {
-    protected $manager;
+    protected $container;
 
-    public function setManager(Doctrine\ORM\EntityManager $manager)
+    public function __construct()
     {
-        $this->manager = $manager;
+        $this->container = new Container;
+    }
+
+    public function getManager()
+    {
+        return $this->container->doctrine;
     }
 
     /**
@@ -19,12 +25,6 @@ abstract class BaseContext extends BehatContext implements DoctrineAwareInterfac
      */
     public function beforeScenario($event)
     {
-        $metadata = $this->manager->getMetadataFactory()->getAllMetadata();
-
-        if (!empty($metadata)) {
-            $tool = new SchemaTool($this->manager);
-            $tool->dropSchema($metadata);
-            $tool->createSchema($metadata);
-        }
+        $this->container->dbRecreator->recreateDatabase();
     }
 }

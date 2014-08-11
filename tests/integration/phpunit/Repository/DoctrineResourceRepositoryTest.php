@@ -9,30 +9,18 @@ class DoctrineResourceRepositoryTest extends TestCase
 {
     public function setUp()
     {
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(array(__DIR__."/fixtures"), true);
-
-        // database configuration parameters
-        $conn = array(
-            'driver' => 'pdo_sqlite',
-            'path' => __DIR__ . '/../db.sqlite',
-        );
-
-        // obtaining the entity manager
-        $em = \Doctrine\ORM\EntityManager::create($conn, $config);
+        $container = new \Fortune\Test\Container;
 
         // drop db then recreate
-        $metadata = $em->getMetadataFactory()->getAllMetadata();
-        $tool = new \Doctrine\ORM\Tools\SchemaTool($em);
-        $tool->dropSchema($metadata);
-        $tool->createSchema($metadata);
+        $container->dbRecreator->recreateDatabase();
 
         $loader = new \Doctrine\Common\DataFixtures\Loader;
         $loader->loadFromDirectory(__DIR__ . '/fixtures');
-        $purger = new \Doctrine\Common\DataFixtures\Purger\ORMPurger($em);
-        $executor = new \Doctrine\Common\DataFixtures\Executor\ORMExecutor($em, $purger);
+        $purger = new \Doctrine\Common\DataFixtures\Purger\ORMPurger($container->doctrine);
+        $executor = new \Doctrine\Common\DataFixtures\Executor\ORMExecutor($container->doctrine, $purger);
         $executor->execute($loader->getFixtures());
 
-        $this->repository = new DoctrineResourceRepository($em, 'test\Fortune\Repository\fixtures\Dog');
+        $this->repository = new DoctrineResourceRepository($container->doctrine, 'test\Fortune\Repository\fixtures\Dog');
     }
 
     public function testFindAllReturnsAnArray()

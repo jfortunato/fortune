@@ -1,9 +1,0 @@
-parameters:
-
-services:
-    fortune.context.doctrine.initializer:
-        class: DoctrineAwareInitializer
-        #arguments:
-            #- @doctrine
-        tags:
-            - { name: behat.context.initializer }
