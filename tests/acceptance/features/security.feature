@@ -15,7 +15,7 @@ Feature: Resource Security
         And The resource requires authentication
         When I send a <method> request to "<url>"
         Then The response code should be 403
-        #And The error message should contain "Access Denied"
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |
@@ -43,7 +43,7 @@ Feature: Resource Security
         And The resource requires role "admin"
         When I send a <method> request to "<url>"
         Then The response code should be 403
-        #And The error message should contain "Access Denied"
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |
@@ -58,7 +58,7 @@ Feature: Resource Security
         And The resource requires role "admin"
         When I send a <method> request to "<url>"
         Then The response code should be 403
-        #And The error message should contain "Access Denied"
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |
@@ -86,7 +86,7 @@ Feature: Resource Security
         And The resource requires owner for access
         When I send a <method> request to "<url>"
         Then The response code should be 403
-        #And The error message should contain "Access Denied"
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |

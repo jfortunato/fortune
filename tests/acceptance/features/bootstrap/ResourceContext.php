@@ -218,9 +218,11 @@ class ResourceContext extends BaseContext
     /**
      * @Given /^The error message should contain "([^"]*)"$/
      */
-    public function theErrorMessageShouldContain($arg1)
+    public function theErrorMessageShouldContain($text)
     {
-        throw new PendingException();
+        assertArrayHasKey('error', $this->response->json());
+
+        assertNotSame(false, strpos($this->response->json()['error'], $text));
     }
 
 }

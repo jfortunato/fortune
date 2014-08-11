@@ -34,7 +34,7 @@ class Resource
     public function index()
     {
         if (!$this->security->isAllowed($this->repository->getClassName())) {
-            return $this->response(403);
+            return $this->responseDenied();
         }
 
         $this->resources = $this->repository->findAll();
@@ -47,7 +47,7 @@ class Resource
         $this->resources = $this->repository->find($id);
 
         if (!$this->security->isAllowed($this->resources ?: $this->repository->getClassName())) {
-            return $this->response(403);
+            return $this->responseDenied();
         }
 
         $code = $this->resources ? 200:404;
@@ -58,7 +58,7 @@ class Resource
     public function create(array $input)
     {
         if (!$this->security->isAllowed($this->repository->getClassName())) {
-            return $this->response(403);
+            return $this->responseDenied();
         }
 
         if (!$this->validator->validate($input)) {
@@ -75,7 +75,7 @@ class Resource
         $resource = $this->repository->find($id);
 
         if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
-            return $this->response(403);
+            return $this->responseDenied();
         }
 
         if (!$resource) {
@@ -96,7 +96,7 @@ class Resource
         $resource = $this->repository->find($id);
 
         if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
-            return $this->response(403);
+            return $this->responseDenied();
         }
 
         $this->repository->delete($id);
@@ -104,9 +104,14 @@ class Resource
         return $this->response(204);
     }
 
-    protected function response($code)
+    protected function response($code, $content = null)
     {
-        return $this->output->response($this->serialize($this->resources), $code);
+        return $this->output->response($this->serialize($content ?: $this->resources), $code);
+    }
+
+    protected function responseDenied()
+    {
+        return $this->response(403, array('error' => 'Access Denied'));
     }
 
     protected function serialize($resources)
