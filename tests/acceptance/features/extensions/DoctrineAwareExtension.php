@@ -25,12 +25,12 @@ class DoctrineAwareInitializer implements InitializerInterface
 
     public function __construct()
     {
-        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../../bootstrap/src/Entity"), true);
+        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/../../app-bootstrap/src/Entity"), true);
 
         // database configuration parameters
         $conn = array(
             'driver' => 'pdo_sqlite',
-            'path' => __DIR__ . '/../../bootstrap/db.sqlite',
+            'path' => __DIR__ . '/../../app-bootstrap/db.sqlite',
         );
 
         // obtaining the entity manager

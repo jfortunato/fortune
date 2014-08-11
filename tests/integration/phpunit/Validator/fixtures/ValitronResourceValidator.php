@@ -1,11 +1,11 @@
 <?php
 
-namespace Fortune\Test\Validator;
+namespace test\Fortune\Validator\fixtures;
 
-use Fortune\Validator\Driver\ValitronResourceValidator;
+use Fortune\Validator\Driver\ValitronResourceValidator as BaseValidator;
 use Valitron\Validator;
 
-class TestValitronResourceValidator extends ValitronResourceValidator
+class ValitronResourceValidator extends BaseValidator
 {
     protected $rules = [];
 

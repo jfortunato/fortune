@@ -172,9 +172,9 @@ class ResourceContext extends BaseContext
     }
 
     /**
-     * @Given /^The "([^"]*)" entity requires authentication$/
+     * @Given /^The resource requires authentication$/
      */
-    public function theEntityRequiresAuthentication($entity)
+    public function theResourceRequiresAuthentication()
     {
         // we need to change a static variable at application runtime
         // and we cant do that here so set a flag for the request to handle it
@@ -198,7 +198,7 @@ class ResourceContext extends BaseContext
     }
 
     /**
-     * @Given /^The "[^"]*" resource requires role "([^"]*)"$/
+     * @Given /^The resource requires role "([^"]*)"$/
      */
     public function theResourceRequiresRole($role)
     {
@@ -206,10 +206,19 @@ class ResourceContext extends BaseContext
     }
 
     /**
-     * @Given /^The "([^"]*)" resource requires owner for access$/
+     * @Given /^The resource requires owner for access$/
      */
-    public function theResourceRequiresOwnerForAccess($entity)
+    public function theResourceRequiresOwnerForAccess()
     {
         $this->query['requiresOwner'] = true;
     }
+
+    /**
+     * @Given /^The error message should contain "([^"]*)"$/
+     */
+    public function theErrorMessageShouldContain($arg1)
+    {
+        throw new PendingException();
+    }
+
 }
