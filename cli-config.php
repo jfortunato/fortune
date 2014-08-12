@@ -1,6 +1,9 @@
 <?php
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
+use Fortune\Test\Container;
 
-require_once 'tests/acceptance/bootstrap/bootstrap.php';
+require_once 'vendor/autoload.php';
 
-return ConsoleRunner::createHelperSet($container['doctrine']);
+$container = new Container;
+
+return ConsoleRunner::createHelperSet($container->doctrine);

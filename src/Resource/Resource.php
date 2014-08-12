@@ -31,7 +31,7 @@ class Resource
         $this->security = $security;
     }
 
-    public function index()
+    public function index($parentId = null)
     {
         if (!$this->security->isAllowed($this->repository->getClassName())) {
             return $this->responseDenied();

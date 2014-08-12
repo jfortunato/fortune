@@ -43,6 +43,18 @@ class ResourceContext extends BaseContext
     }
 
     /**
+     * @Given /^The following puppies exist:$/
+     */
+    public function theFollowingPuppiesExist(TableNode $table)
+    {
+        foreach ($table->getHash() as $data) {
+            $this->thereIsPuppy($data['id'], array(
+                'name' => $data['name'],
+            ));
+        }
+    }
+
+    /**
      * @When /^I send a (GET|POST|PUT|DELETE) request to "([^"]*)"$/
      */
     public function iSendARequestTo($method, $resource)
@@ -157,6 +169,19 @@ class ResourceContext extends BaseContext
         return $dog;
     }
 
+    public function thereIsPuppy($id = null, array $puppyExtra = array())
+    {
+        if (null === $puppy = $this->getManager()->getRepository('Fortune\Test\Entity\Puppy')->findOneBy(array('id' => $id))) {
+            $puppy = new Fortune\Test\Entity\Puppy;
+            $puppy->setName($puppyExtra['name']);
+
+            $this->getManager()->persist($puppy);
+            $this->getManager()->flush();
+        }
+
+        return $puppy;
+    }
+
     /**
      * @Given /^I am not logged in$/
      */
@@ -233,5 +258,19 @@ class ResourceContext extends BaseContext
         // the SimpleOwnerBouncer just checks if $_SESSION['username'] isset
         // to determine the owner, so just make sure we have set login
         assertTrue($this->query['doLogin']);
+    }
+
+    /**
+     * @Given /^The puppy "([^"]*)" belongs to dog "([^"]*)"$/
+     */
+    public function thePuppyBelongsToDog($puppyName, $dogName)
+    {
+        $puppy = $this->getManager()->getRepository('Fortune\Test\Entity\Puppy')->findOneBy(array('name' => $puppyName));
+        $dog = $this->getManager()->getRepository('Fortune\Test\Entity\Dog')->findOneBy(array('name' => $dogName));
+
+        $puppy->setDog($dog);
+
+        $this->getManager()->persist($puppy);
+        $this->getManager()->flush();
     }
 }
