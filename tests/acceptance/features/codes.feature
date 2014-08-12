@@ -43,10 +43,12 @@ Feature: Response Codes
             | bar |
         When I send a POST request to "/dogs"
         Then The response code should be 400
+        And The error message should contain "Bad Input"
 
     Scenario: 404 NOT FOUND - when individual resource doesn't exist
         When I send a GET request to "/dogs/3"
         Then The response code should be 404
+        And The error message should contain "Resource Not Found"
 
     Scenario: 404 NOT FOUND - when trying to update resource that doesn't exist
         Given I send the following parameters:
@@ -54,12 +56,14 @@ Feature: Response Codes
             | Lucca |
         When I send a PUT request to "/dogs/3"
         Then The response code should be 404
+        And The error message should contain "Resource Not Found"
 
     Scenario Outline: 403 FORBIDDEN - when login is required
         Given I am not logged in
         And The resource requires authentication
         When I send a <method> request to "<url>"
         Then The response code should be 403
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |
@@ -74,6 +78,7 @@ Feature: Response Codes
         And The resource requires role "admin"
         When I send a <method> request to "<url>"
         Then The response code should be 403
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |
@@ -87,6 +92,7 @@ Feature: Response Codes
         And The resource requires owner for access
         When I send a <method> request to "<url>"
         Then The response code should be 403
+        And The error message should contain "Access Denied"
     Examples:
             | method | url     |
             | GET    | /dogs   |

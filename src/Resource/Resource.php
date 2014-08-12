@@ -50,9 +50,7 @@ class Resource
             return $this->responseDenied();
         }
 
-        $code = $this->resources ? 200:404;
-
-        return $this->response($code);
+        return $this->resources ? $this->response(200):$this->response(404, array('error' => 'Resource Not Found'));
     }
 
     public function create(array $input)
@@ -62,7 +60,7 @@ class Resource
         }
 
         if (!$this->validator->validate($input)) {
-            return $this->response(400);
+            return $this->response(400, array('error' => 'Bad Input'));
         }
 
         $this->resources = $this->repository->create($input);
@@ -79,11 +77,11 @@ class Resource
         }
 
         if (!$resource) {
-            return $this->response(404);
+            return $this->response(404, array('error' => 'Resource Not Found'));
         }
 
         if (!$this->validator->validate($input)) {
-            return $this->response(400);
+            return $this->response(400, array('error' => 'Bad Input'));
         }
 
         $this->repository->update($id, $input);
