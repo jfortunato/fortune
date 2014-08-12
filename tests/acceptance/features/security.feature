@@ -95,6 +95,20 @@ Feature: Resource Security
             | PUT    | /dogs/1 |
             | DELETE | /dogs/1 |
 
+    Scenario Outline: Granted access when owner is required and we are the owner
+        Given I am logged in
+        And I am the owner of the resource
+        And The resource requires owner for access
+        When I send a <method> request to "<url>"
+        Then The response code should not be 403
+    Examples:
+            | method | url     |
+            | GET    | /dogs   |
+            | GET    | /dogs/1 |
+            | POST   | /dogs   |
+            | PUT    | /dogs/1 |
+            | DELETE | /dogs/1 |
+
     Scenario: Serializing resource without security in output
         When I send a GET request to "/dogs/1"
         Then The response should not contain key "requires_authentication"
