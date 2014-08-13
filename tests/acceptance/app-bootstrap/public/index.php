@@ -56,9 +56,16 @@ $app->delete('/dogs/:id', function ($id) use ($resource)
     echo $resource->delete($id);
 });
 
+$app->get('/puppies', function () use ($resource)
+{
+    // this should be error
+    echo $resource->index();
+});
+
 $app->get('/dogs/:id/puppies', function ($id) use ($resource)
 {
     echo $resource->index($id);
 });
+
 
 $app->run();

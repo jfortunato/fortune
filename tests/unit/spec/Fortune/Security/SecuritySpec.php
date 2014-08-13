@@ -7,12 +7,13 @@ use Prophecy\Argument;
 use Fortune\Security\Bouncer\AuthenticationBouncer;
 use Fortune\Security\Bouncer\RoleBouncer;
 use Fortune\Security\Bouncer\OwnerBouncer;
+use Fortune\Security\Bouncer\ParentBouncer;
 
 class SecuritySpec extends ObjectBehavior
 {
-    function let(AuthenticationBouncer $authBouncer, RoleBouncer $roleBouncer, OwnerBouncer $ownerBouncer)
+    function let(AuthenticationBouncer $authBouncer, RoleBouncer $roleBouncer, OwnerBouncer $ownerBouncer, ParentBouncer $parentBouncer)
     {
-        $this->beConstructedWith($authBouncer, $roleBouncer, $ownerBouncer);
+        $this->beConstructedWith($authBouncer, $roleBouncer, $ownerBouncer, $parentBouncer);
     }
 
     function it_is_initializable()
@@ -33,11 +34,12 @@ class SecuritySpec extends ObjectBehavior
         $this->isAllowed('Foo\Bar')->shouldReturn(false);;
     }
 
-    function it_should_return_true_only_when_all_bouncers_return_true($authBouncer, $roleBouncer, $ownerBouncer)
+    function it_should_return_true_only_when_all_bouncers_return_true($authBouncer, $roleBouncer, $ownerBouncer, $parentBouncer)
     {
         $authBouncer->check('Foo\Bar')->willReturn(true);
         $roleBouncer->check('Foo\Bar')->willReturn(true);
         $ownerBouncer->check('Foo\Bar')->willReturn(true);
+        $parentBouncer->check('Foo\Bar')->willReturn(true);
 
         $this->isAllowed('Foo\Bar')->shouldReturn(true);
     }

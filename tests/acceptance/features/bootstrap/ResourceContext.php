@@ -273,4 +273,12 @@ class ResourceContext extends BaseContext
         $this->getManager()->persist($puppy);
         $this->getManager()->flush();
     }
+
+    /**
+     * @Given /^The resource "([^"]*)" belongs to resource "([^"]*)"$/
+     */
+    public function theResourceBelongsToResource($child, $parent)
+    {
+        //throw new PendingException();
+    }
 }

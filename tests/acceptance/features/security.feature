@@ -109,6 +109,11 @@ Feature: Resource Security
             | PUT    | /dogs/1 |
             | DELETE | /dogs/1 |
 
+    Scenario: Denied access when resource has parent but we try to directly access the child
+        Given The resource "puppies" belongs to resource "dogs"
+        When I send a GET request to "/puppies"
+        Then The response code should be 403
+
     Scenario: Serializing resource without security in output
         When I send a GET request to "/dogs/1"
         Then The response should not contain key "requires_authentication"

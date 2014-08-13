@@ -11,13 +11,15 @@ use JMS\Serializer\SerializerBuilder;
 use JMS\Serializer\SerializationContext;
 use Fortune\Serializer\Driver\JMSPropertyExcluder;
 use Fortune\Output\Driver\SlimOutput;
-use Fortune\Test\Validator\DogValidator;
 use Fortune\Security\Security;
 use Fortune\Security\ResourceInspector;
 use Fortune\Security\Bouncer\Driver\SimpleAuthenticationBouncer;
 use Fortune\Security\Bouncer\Driver\SimpleRoleBouncer;
 use Fortune\Security\Bouncer\Driver\SimpleOwnerBouncer;
+use Fortune\Security\Bouncer\ParentBouncer;
 use Fortune\Resource\Resource;
+use Fortune\Configuration\Configuration;
+use Fortune\Configuration\ResourceConfiguration;
 
 class Container
 {
@@ -48,8 +50,19 @@ class Container
             return EntityManager::create($conn, $config);
         });
 
+        $slim->configuration = function () {
+            $configuration = new Configuration;
+
+            $config1 = new ResourceConfiguration('dogs', 'Fortune\Test\Entity\Dog', 'Fortune\Test\Validator\DogValidator');
+            $config2 = new ResourceConfiguration('puppies', 'Fortune\Test\Entity\Puppy', 'Fortune\Test\Validator\PuppyValidator', 'dogs');
+            $configuration->addResourceConfiguration($config1);
+            $configuration->addResourceConfiguration($config2);
+
+            return $configuration->getResourceConfigurationFromRequest($_SERVER['REQUEST_URI']);
+        };
+
         $slim->repository = function ($slim) {
-            return new DoctrineResourceRepository($slim->doctrine, 'Fortune\Test\Entity\Dog');
+            return new DoctrineResourceRepository($slim->doctrine, $slim->configuration->getEntityClass());
         };
 
         $slim->serializer = function () {
@@ -64,8 +77,10 @@ class Container
             return new SlimOutput($slim->response);
         };
 
-        $slim->validator = function () {
-            return new DogValidator;
+        $slim->validator = function ($slim) {
+            $class = $slim->configuration->getValidatorClass();
+
+            return new $class;
         };
 
         $slim->inspector = function () {
@@ -84,11 +99,16 @@ class Container
             return new SimpleOwnerBouncer($slim->inspector);
         };
 
+        $slim->parentBouncer = function ($slim) {
+            return new ParentBouncer($slim->inspector, $this->configuration);
+        };
+
         $slim->security = function ($slim) {
             return new Security(
                 $slim->authBouncer,
                 $slim->roleBouncer,
-                $slim->ownerBouncer
+                $slim->ownerBouncer,
+                $slim->parentBouncer
             );
         };
 
