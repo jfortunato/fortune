@@ -2,24 +2,33 @@
 
 namespace Fortune\Output\Driver;
 
-use Fortune\Output\OutputInterface;
 use Slim\Http\Response;
+use Fortune\Output\AbstractOutput;
+use Fortune\Serializer\SerializerInterface;
 
-class SlimOutput implements OutputInterface
+class SlimOutput extends AbstractOutput
 {
     protected $response;
 
-    public function __construct(Response $response)
+    public function __construct(Response $response, SerializerInterface $serializer)
     {
         $this->response = $response;
+
+        parent::__construct($serializer);
     }
 
-    public function response($content, $code)
+    protected function setJsonHeader()
     {
         $this->response->headers->set('Content-Type', 'application/json');
+    }
 
+    protected function setStatusCode($code)
+    {
         $this->response->setStatus($code);
+    }
 
-        return $content;
+    protected function content($serializedContent)
+    {
+        return $serializedContent;
     }
 }

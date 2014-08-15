@@ -3,16 +3,13 @@
 namespace Fortune\Resource;
 
 use Fortune\Repository\ResourceRepositoryInterface;
-use Fortune\Serializer\SerializerInterface;
-use Fortune\Output\OutputInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
+use Fortune\Output\AbstractOutput;
 
 class Resource
 {
     protected $repository;
-
-    protected $serializer;
 
     protected $output;
 
@@ -22,10 +19,9 @@ class Resource
 
     protected $security;
 
-    public function __construct(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator, SecurityInterface $security)
+    public function __construct(ResourceRepositoryInterface $repository, AbstractOutput $output, ResourceValidatorInterface $validator, SecurityInterface $security)
     {
         $this->repository = $repository;
-        $this->serializer = $serializer;
         $this->output = $output;
         $this->validator = $validator;
         $this->security = $security;
@@ -104,16 +100,11 @@ class Resource
 
     protected function response($code, $content = null)
     {
-        return $this->output->response($this->serialize($content ?: $this->resources), $code);
+        return $this->output->response($content ?: $this->resources, $code);
     }
 
     protected function responseDenied()
     {
         return $this->response(403, array('error' => 'Access Denied'));
-    }
-
-    protected function serialize($resources)
-    {
-        return $this->serializer->serialize($resources);
     }
 }

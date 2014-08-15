@@ -74,7 +74,7 @@ class Container
         };
 
         $slim->output = function ($slim) {
-            return new SlimOutput($slim->response);
+            return new SlimOutput($slim->response, $slim->serializer);
         };
 
         $slim->validator = function ($slim) {
@@ -115,7 +115,6 @@ class Container
         $slim->resource = function ($slim) {
             return new Resource(
                 $slim->repository,
-                $slim->serializer,
                 $slim->output,
                 $slim->validator,
                 $slim->security

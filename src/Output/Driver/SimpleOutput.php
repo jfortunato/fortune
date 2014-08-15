@@ -2,15 +2,22 @@
 
 namespace Fortune\Output\Driver;
 
-use Fortune\Output\OutputInterface;
+use Fortune\Output\AbstractOutput;
 
-class SimpleOutput implements OutputInterface
+class SimpleOutput extends AbstractOutput
 {
-    public function response($content, $code)
+    protected function setJsonHeader()
     {
         header('Content-Type: application/json');
-        http_response_code($code);
+    }
 
-        return $content;
+    protected function setStatusCode($code)
+    {
+        http_response_code($code);
+    }
+
+    protected function content($serializedContent)
+    {
+        return $serializedContent;
     }
 }

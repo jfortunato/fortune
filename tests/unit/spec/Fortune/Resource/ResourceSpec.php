@@ -5,16 +5,15 @@ namespace spec\Fortune\Resource;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Fortune\Repository\ResourceRepositoryInterface;
-use Fortune\Serializer\SerializerInterface;
-use Fortune\Output\OutputInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
+use Fortune\Output\AbstractOutput;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, SerializerInterface $serializer, OutputInterface $output, ResourceValidatorInterface $validator, SecurityInterface $security)
+    function let(ResourceRepositoryInterface $repository, AbstractOutput $output, ResourceValidatorInterface $validator, SecurityInterface $security)
     {
-        $this->beConstructedWith($repository, $serializer, $output, $validator, $security);
+        $this->beConstructedWith($repository, $output, $validator, $security);
     }
 
     function it_is_initializable()
@@ -22,7 +21,7 @@ class ResourceSpec extends ObjectBehavior
         $this->shouldHaveType('Fortune\Resource\Resource');
     }
 
-    function its_index_method_should_return_json_array_with_all_of_a_resource($repository, $serializer, $output, $security)
+    function its_index_method_should_return_json_array_with_all_of_a_resource($repository, $output, $security)
     {
         $repository->getClassName()->willReturn('Foo\Bar');
 
@@ -30,14 +29,12 @@ class ResourceSpec extends ObjectBehavior
 
         $repository->findAll()->shouldBeCalled()->willReturn($resources = array('foo'));
 
-        $serializer->serialize($resources)->shouldBeCalled()->willReturn('serialized');
-
-        $output->response('serialized', 200)->shouldBeCalled()->willReturn('response');
+        $output->response($resources, 200)->shouldBeCalled()->willReturn('response');
 
         $this->index()->shouldReturn('response');
     }
 
-    function its_show_method_should_return_a_single_json_resource_object($repository, $serializer, $output, $security)
+    function its_show_method_should_return_a_single_json_resource_object($repository, $output, $security)
     {
         $repository->getClassName()->willReturn('Foo\Bar');
 
@@ -45,14 +42,12 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('foo')->willReturn(true);
 
-        $serializer->serialize($resource)->shouldBeCalled()->willReturn('serialized');
-
-        $output->response('serialized', 200)->shouldBeCalled()->willReturn('response');
+        $output->response($resource, 200)->shouldBeCalled()->willReturn('response');
 
         $this->show(1)->shouldReturn('response');
     }
 
-    function its_create_method_can_create_a_new_resource_and_return_its_json_serialization($repository, $serializer, $output, $validator, $security)
+    function its_create_method_can_create_a_new_resource_and_return_its_json_serialization($repository, $output, $validator, $security)
     {
         $repository->getClassName()->willReturn('Foo\Bar');
 
@@ -62,9 +57,7 @@ class ResourceSpec extends ObjectBehavior
 
         $repository->create(['input'])->shouldBeCalled()->willReturn($resource = 'foo');
 
-        $serializer->serialize($resource)->shouldBeCalled()->willReturn('serialized');
-
-        $output->response('serialized', 201)->shouldBeCalled()->willReturn('response');
+        $output->response($resource, 201)->shouldBeCalled()->willReturn('response');
 
         $this->create(array('input'))->shouldReturn('response');
     }
@@ -107,7 +100,7 @@ class ResourceSpec extends ObjectBehavior
 
         $repository->find(1)->shouldBeCalled()->willReturn(null);
 
-        $output->response(null, 404)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Resource Not Found'], 404)->shouldBeCalled()->willReturn('response');
 
         $this->show(1);
     }
@@ -120,7 +113,7 @@ class ResourceSpec extends ObjectBehavior
 
         $repository->find(1)->shouldBeCalled()->willReturn(null);
 
-        $output->response(null, 404)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Resource Not Found'], 404)->shouldBeCalled()->willReturn('response');
 
         $this->update(1, ['input']);
     }
@@ -133,7 +126,7 @@ class ResourceSpec extends ObjectBehavior
 
         $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 400)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Bad Input'], 400)->shouldBeCalled()->willReturn('response');
 
         $this->create(['input']);
     }
@@ -146,7 +139,7 @@ class ResourceSpec extends ObjectBehavior
 
         $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 400)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Bad Input'], 400)->shouldBeCalled()->willReturn('response');
 
         $this->update(1, ['input']);
     }
@@ -157,7 +150,7 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('Foo\Bar')->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 403)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Access Denied'], 403)->shouldBeCalled()->willReturn('response');
 
         $this->index();
     }
@@ -168,7 +161,7 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 403)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Access Denied'], 403)->shouldBeCalled()->willReturn('response');
 
         $this->show(1);
     }
@@ -179,7 +172,7 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('Foo\Bar')->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 403)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Access Denied'], 403)->shouldBeCalled()->willReturn('response');
 
         $this->create([]);
     }
@@ -190,7 +183,7 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 403)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Access Denied'], 403)->shouldBeCalled()->willReturn('response');
 
         $this->update(1, []);
     }
@@ -201,7 +194,7 @@ class ResourceSpec extends ObjectBehavior
 
         $security->isAllowed('foo')->shouldBeCalled()->willReturn(false);
 
-        $output->response(null, 403)->shouldBeCalled()->willReturn('response');
+        $output->response(['error' => 'Access Denied'], 403)->shouldBeCalled()->willReturn('response');
 
         $this->delete(1);
     }
