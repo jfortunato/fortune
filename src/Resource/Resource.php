@@ -5,13 +5,10 @@ namespace Fortune\Resource;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
-use Fortune\Output\AbstractOutput;
 
-class Resource
+class Resource implements ResourceInterface
 {
     protected $repository;
-
-    protected $output;
 
     protected $validator;
 
@@ -19,92 +16,45 @@ class Resource
 
     protected $security;
 
-    public function __construct(ResourceRepositoryInterface $repository, AbstractOutput $output, ResourceValidatorInterface $validator, SecurityInterface $security)
+    public function __construct(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security)
     {
         $this->repository = $repository;
-        $this->output = $output;
         $this->validator = $validator;
         $this->security = $security;
     }
 
-    public function index($parentId = null)
+    public function all()
     {
-        if (!$this->security->isAllowed($this->repository->getClassName())) {
-            return $this->responseDenied();
-        }
-
-        $this->resources = $this->repository->findAll();
-
-        return $this->response(200);
+        return $this->repository->findAll();
     }
 
-    public function show($id)
+    public function single($id)
     {
-        $this->resources = $this->repository->find($id);
-
-        if (!$this->security->isAllowed($this->resources ?: $this->repository->getClassName())) {
-            return $this->responseDenied();
-        }
-
-        return $this->resources ? $this->response(200):$this->response(404, array('error' => 'Resource Not Found'));
+        return $this->repository->find($id);
     }
 
     public function create(array $input)
     {
-        if (!$this->security->isAllowed($this->repository->getClassName())) {
-            return $this->responseDenied();
-        }
-
-        if (!$this->validator->validate($input)) {
-            return $this->response(400, array('error' => 'Bad Input'));
-        }
-
-        $this->resources = $this->repository->create($input);
-
-        return $this->response(201);
+        return $this->repository->create($input);
     }
 
     public function update($id, array $input)
     {
-        $resource = $this->repository->find($id);
-
-        if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
-            return $this->responseDenied();
-        }
-
-        if (!$resource) {
-            return $this->response(404, array('error' => 'Resource Not Found'));
-        }
-
-        if (!$this->validator->validate($input)) {
-            return $this->response(400, array('error' => 'Bad Input'));
-        }
-
-        $this->repository->update($id, $input);
-
-        return $this->response(204);
+        return $this->repository->update($id, $input);
     }
 
     public function delete($id)
     {
-        $resource = $this->repository->find($id);
-
-        if (!$this->security->isAllowed($resource ?: $this->repository->getClassName())) {
-            return $this->responseDenied();
-        }
-
-        $this->repository->delete($id);
-
-        return $this->response(204);
+        return $this->repository->delete($id);
     }
 
-    protected function response($code, $content = null)
+    public function passesSecurity($entity = null)
     {
-        return $this->output->response($content ?: $this->resources, $code);
+        return $this->security->isAllowed($entity ?: $this->repository->getClassName());
     }
 
-    protected function responseDenied()
+    public function passesValidation(array $input)
     {
-        return $this->response(403, array('error' => 'Access Denied'));
+        return $this->validator->validate($input);
     }
 }

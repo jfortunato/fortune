@@ -29,42 +29,42 @@ if (isset($_GET['requiresOwner'])) {
 
 $app = $container->getSlim();
 parse_str($app->request->getBody(), $input);
-$resource = $app->resource;
+$output = $app->output;
 
-$app->get('/dogs', function () use ($resource)
+$app->get('/dogs', function () use ($output)
 {
-    echo $resource->index();
+    echo $output->index();
 });
 
-$app->post('/dogs', function () use ($resource, $input)
+$app->post('/dogs', function () use ($output, $input)
 {
-    echo $resource->create($input);
+    echo $output->create($input);
 });
 
-$app->get('/dogs/:id', function ($id) use ($resource)
+$app->get('/dogs/:id', function ($id) use ($output)
 {
-    echo $resource->show($id);
+    echo $output->show($id);
 });
 
-$app->put('/dogs/:id', function ($id) use ($resource, $input)
+$app->put('/dogs/:id', function ($id) use ($output, $input)
 {
-    echo $resource->update($id, $input);
+    echo $output->update($id, $input);
 });
 
-$app->delete('/dogs/:id', function ($id) use ($resource)
+$app->delete('/dogs/:id', function ($id) use ($output)
 {
-    echo $resource->delete($id);
+    echo $output->delete($id);
 });
 
-$app->get('/puppies', function () use ($resource)
+$app->get('/puppies', function () use ($output)
 {
     // this should be error
-    echo $resource->index();
+    echo $output->index();
 });
 
-$app->get('/dogs/:id/puppies', function ($id) use ($resource)
+$app->get('/dogs/:id/puppies', function ($id) use ($output)
 {
-    echo $resource->index($id);
+    echo $output->index($id);
 });
 
 

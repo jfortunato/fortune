@@ -2,9 +2,9 @@
 
 namespace Fortune\Output\Driver;
 
-use Fortune\Output\AbstractOutput;
+use Fortune\Output\BaseOutput;
 
-class SimpleOutput extends AbstractOutput
+class SimpleOutput extends BaseOutput
 {
     protected function setJsonHeader()
     {

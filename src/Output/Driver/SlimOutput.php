@@ -3,18 +3,19 @@
 namespace Fortune\Output\Driver;
 
 use Slim\Http\Response;
-use Fortune\Output\AbstractOutput;
+use Fortune\Output\BaseOutput;
 use Fortune\Serializer\SerializerInterface;
+use Fortune\Resource\ResourceInterface;
 
-class SlimOutput extends AbstractOutput
+class SlimOutput extends BaseOutput
 {
     protected $response;
 
-    public function __construct(Response $response, SerializerInterface $serializer)
+    public function __construct(Response $response, SerializerInterface $serializer, ResourceInterface $resource)
     {
         $this->response = $response;
 
-        parent::__construct($serializer);
+        parent::__construct($serializer, $resource);
     }
 
     protected function setJsonHeader()
