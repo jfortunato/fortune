@@ -62,9 +62,29 @@ $app->get('/puppies', function () use ($output)
     echo $output->index();
 });
 
-$app->get('/dogs/:id/puppies', function ($id) use ($output)
+$app->get('/dogs/:dog/puppies', function ($dog) use ($output)
 {
-    echo $output->index($id);
+    echo $output->index($dog);
+});
+
+$app->get('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output)
+{
+    echo $output->show($id, $dog);
+});
+
+$app->post('/dogs/:dog/puppies', function ($dog) use ($output, $input)
+{
+    echo $output->create($input, $dog);
+});
+
+$app->put('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output, $input)
+{
+    echo $output->update($id, $input, $dog);
+});
+
+$app->delete('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output)
+{
+    echo $output->delete($id, $dog);
 });
 
 

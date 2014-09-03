@@ -27,6 +27,16 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         return $this->manager->getRepository($this->resourceClass)->find($id);
     }
 
+    public function findBy(array $findBy)
+    {
+        return $this->manager->getRepository($this->resourceClass)->findBy($findBy);
+    }
+
+    public function findOneBy(array $findBy)
+    {
+        return $this->manager->getRepository($this->resourceClass)->findOneBy($findBy);
+    }
+
     public function create(array $input)
     {
         $resource = new $this->resourceClass;

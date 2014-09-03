@@ -7,12 +7,14 @@ use Prophecy\Argument;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
+use Fortune\Resource\Creator\ResourceCreator;
+use Fortune\Configuration\Configuration;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security)
+    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security, Configuration $config, ResourceCreator $resourceCreator)
     {
-        $this->beConstructedWith($repository, $validator, $security);
+        $this->beConstructedWith($repository, $validator, $security, $config, $resourceCreator);
     }
 
     function it_is_initializable()

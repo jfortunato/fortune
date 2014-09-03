@@ -46,4 +46,17 @@ class ConfigurationSpec extends ObjectBehavior
 
         $this->getResourceConfigurationFromRequest('/dogs')->shouldReturn(null);
     }
+
+    function it_can_get_resourceconfig_for_a_resource_name(ResourceConfiguration $config1, ResourceConfiguration $config2)
+    {
+        $this->addResourceConfiguration($config1);
+        $this->addResourceConfiguration($config2);
+
+        $config1->getResource()->willReturn('dogs');
+        $config2->getResource()->willReturn('puppies');
+
+        $this->resourceConfigurationFor('dogs')->shouldReturn($config1);
+        $this->resourceConfigurationFor('puppies')->shouldReturn($config2);
+        $this->resourceConfigurationFor('foo')->shouldReturn(null);
+    }
 }

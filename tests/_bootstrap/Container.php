@@ -20,6 +20,7 @@ use Fortune\Security\Bouncer\ParentBouncer;
 use Fortune\Resource\Resource;
 use Fortune\Configuration\Configuration;
 use Fortune\Configuration\ResourceConfiguration;
+use Fortune\Resource\Creator\Driver\DoctrineResourceCreator;
 
 class Container
 {
@@ -50,6 +51,10 @@ class Container
             return EntityManager::create($conn, $config);
         });
 
+        $slim->resourceCreator = function ($slim) {
+            return new DoctrineResourceCreator($slim->configuration, $slim->security, $slim->doctrine);
+        };
+
         $slim->configuration = function () {
             $configuration = new Configuration;
 
@@ -58,11 +63,7 @@ class Container
             $configuration->addResourceConfiguration($config1);
             $configuration->addResourceConfiguration($config2);
 
-            return $configuration->getResourceConfigurationFromRequest($_SERVER['REQUEST_URI']);
-        };
-
-        $slim->repository = function ($slim) {
-            return new DoctrineResourceRepository($slim->doctrine, $slim->configuration->getEntityClass());
+            return $configuration;
         };
 
         $slim->serializer = function () {
@@ -74,13 +75,9 @@ class Container
         };
 
         $slim->output = function ($slim) {
-            return new SlimOutput($slim->response, $slim->serializer, $slim->resource);
-        };
+            $currentConfig = $slim->configuration->getCurrentResourceConfiguration();
 
-        $slim->validator = function ($slim) {
-            $class = $slim->configuration->getValidatorClass();
-
-            return new $class;
+            return new SlimOutput($slim->response, $slim->serializer, $slim->resourceCreator->create($currentConfig->getResource()));
         };
 
         $slim->inspector = function () {
@@ -100,7 +97,7 @@ class Container
         };
 
         $slim->parentBouncer = function ($slim) {
-            return new ParentBouncer($slim->inspector, $this->configuration);
+            return new ParentBouncer($slim->inspector, $slim->configuration->getCurrentResourceConfiguration());
         };
 
         $slim->security = function ($slim) {
@@ -109,14 +106,6 @@ class Container
                 $slim->roleBouncer,
                 $slim->ownerBouncer,
                 $slim->parentBouncer
-            );
-        };
-
-        $slim->resource = function ($slim) {
-            return new Resource(
-                $slim->repository,
-                $slim->validator,
-                $slim->security
             );
         };
 

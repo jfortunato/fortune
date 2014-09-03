@@ -55,18 +55,18 @@ abstract class BaseOutput
         return !$this->resource->passesValidation($input);
     }
 
-    public function index()
+    public function index($parentId = null)
     {
         if ($this->failsSecurity()) return $this->responseDenied();
 
-        $entities = $this->resource->all();
+        $entities = $parentId ? $this->resource->allByParent($parentId):$this->resource->all();
 
         return $this->response($entities, 200);
     }
 
-    public function show($id)
+    public function show($id, $parentId = null)
     {
-        $entity = $this->resource->single($id);
+        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
         if ($this->failsSecurity($entity)) return $this->responseDenied();
 
@@ -75,20 +75,20 @@ abstract class BaseOutput
         return $this->response($entity, 200);
     }
 
-    public function create(array $input)
+    public function create(array $input, $parentId = null)
     {
         if ($this->failsSecurity()) return $this->responseDenied();
 
         if ($this->failsValidation($input)) return $this->responseBadInput();
 
-        $entity = $this->resource->create($input);
+        $entity = $parentId ? $this->resource->createWithParent($parentId, $input) : $this->resource->create($input);
 
         return $this->response($entity, 201);
     }
 
-    public function update($id, array $input)
+    public function update($id, array $input, $parentId = null)
     {
-        $entity = $this->resource->single($id);
+        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
         if ($this->failsSecurity($entity)) return $this->responseDenied();
 
@@ -101,9 +101,9 @@ abstract class BaseOutput
         return $this->response(null, 204);
     }
 
-    public function delete($id)
+    public function delete($id, $parentId = null)
     {
-        $entity = $this->resource->single($id);
+        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
         if ($this->failsSecurity($entity)) return $this->responseDenied();
 

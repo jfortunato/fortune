@@ -6,6 +6,13 @@ class Configuration
 {
     protected $resourceConfigurations = array();
 
+    protected $resourceCreator;
+
+    public function addResourceConfiguration(ResourceConfiguration $resourceConfiguration)
+    {
+        $this->resourceConfigurations[] = $resourceConfiguration;
+    }
+
     public function getResourceConfigurationFromRequest($route)
     {
         // get just the base url without query string
@@ -18,17 +25,34 @@ class Configuration
         $parts = explode('/', $route);
         $resource = is_numeric(end($parts)) ? prev($parts):end($parts);
 
+        return $this->resourceConfigurationFor($resource);
+    }
+
+    public function getCurrentResourceConfiguration()
+    {
+        return $this->getResourceConfigurationFromRequest($_SERVER['REQUEST_URI']);
+    }
+
+    public function getCurrentEntityClass()
+    {
+        return $this->getResourceConfigurationFromRequest($_SERVER['REQUEST_URI'])
+            ->getEntityClass();
+    }
+
+    public function getCurrentValidatorClass()
+    {
+        return $this->getResourceConfigurationFromRequest($_SERVER['REQUEST_URI'])
+            ->getValidatorClass();
+    }
+
+    public function resourceConfigurationFor($resourceName)
+    {
         foreach ($this->resourceConfigurations as $config) {
-            if ($config->getResource() === $resource) {
+            if ($config->getResource() === $resourceName) {
                 return $config;
             }
         }
 
         return null;
-    }
-
-    public function addResourceConfiguration(ResourceConfiguration $resourceConfiguration)
-    {
-        $this->resourceConfigurations[] = $resourceConfiguration;
     }
 }

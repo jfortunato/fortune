@@ -41,6 +41,19 @@ class ResourceConfiguration
     }
 
     /**
+     * Sets the value of EntityClass
+     *
+     * @param $entityClass description
+     *
+     * @return ResourceConfiguration
+     */
+    public function setEntityClass($entityClass)
+    {
+        $this->entityClass = $entityClass;
+        return $this;
+    }
+
+    /**
      * Gets the value of validatorClass
      *
      * @return string|null
@@ -58,5 +71,30 @@ class ResourceConfiguration
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Sets the value of parent
+     *
+     * @param $parent description
+     *
+     * @return ResourceConfiguration
+     */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    public function getParentEntityProperty()
+    {
+        // the parent resource may be pluralized
+        // but the property name is most likely singular
+        // if property name actually plural just use that
+        // otherwise make it singular
+        $reflection = new \ReflectionClass($this->getEntityClass());
+
+        return $reflection->hasProperty($this->getParent())
+            ? $this->getParent() : preg_replace('/s$/', '', $this->getParent());
     }
 }
