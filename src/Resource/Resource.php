@@ -27,8 +27,8 @@ class Resource implements ResourceInterface
         ResourceValidatorInterface $validator,
         SecurityInterface $security,
         Configuration $config,
-        ResourceCreator $resourceCreator)
-    {
+        ResourceCreator $resourceCreator
+    ) {
         $this->repository = $repository;
         $this->validator = $validator;
         $this->security = $security;

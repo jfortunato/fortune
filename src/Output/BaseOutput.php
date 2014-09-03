@@ -57,7 +57,9 @@ abstract class BaseOutput
 
     public function index($parentId = null)
     {
-        if ($this->failsSecurity()) return $this->responseDenied();
+        if ($this->failsSecurity()) {
+            return $this->responseDenied();
+        }
 
         $entities = $parentId ? $this->resource->allByParent($parentId):$this->resource->all();
 
@@ -68,18 +70,26 @@ abstract class BaseOutput
     {
         $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity($entity)) return $this->responseDenied();
+        if ($this->failsSecurity($entity)) {
+            return $this->responseDenied();
+        }
 
-        if (!$entity) return $this->responseNotFound();
+        if (!$entity) {
+            return $this->responseNotFound();
+        }
 
         return $this->response($entity, 200);
     }
 
     public function create(array $input, $parentId = null)
     {
-        if ($this->failsSecurity()) return $this->responseDenied();
+        if ($this->failsSecurity()) {
+            return $this->responseDenied();
+        }
 
-        if ($this->failsValidation($input)) return $this->responseBadInput();
+        if ($this->failsValidation($input)) {
+            return $this->responseBadInput();
+        }
 
         $entity = $parentId ? $this->resource->createWithParent($parentId, $input) : $this->resource->create($input);
 
@@ -90,11 +100,17 @@ abstract class BaseOutput
     {
         $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity($entity)) return $this->responseDenied();
+        if ($this->failsSecurity($entity)) {
+            return $this->responseDenied();
+        }
 
-        if (!$entity) return $this->responseNotFound();
+        if (!$entity) {
+            return $this->responseNotFound();
+        }
 
-        if ($this->failsValidation($input)) return $this->responseBadInput();
+        if ($this->failsValidation($input)) {
+            return $this->responseBadInput();
+        }
 
         $this->resource->update($id, $input);
 
@@ -105,9 +121,13 @@ abstract class BaseOutput
     {
         $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity($entity)) return $this->responseDenied();
+        if ($this->failsSecurity($entity)) {
+            return $this->responseDenied();
+        }
 
-        if (!$entity) return $this->responseNotFound();
+        if (!$entity) {
+            return $this->responseNotFound();
+        }
 
         $this->resource->delete($id);
 

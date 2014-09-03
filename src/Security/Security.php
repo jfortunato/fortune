@@ -11,8 +11,12 @@ class Security implements SecurityInterface
 {
     protected $bouncers = array();
 
-    public function __construct(AuthenticationBouncer $authenticationBouncer, RoleBouncer $roleBouncer, OwnerBouncer $ownerBouncer, ParentBouncer $parentBouncer)
-    {
+    public function __construct(
+        AuthenticationBouncer $authenticationBouncer,
+        RoleBouncer $roleBouncer,
+        OwnerBouncer $ownerBouncer,
+        ParentBouncer $parentBouncer
+    ) {
         $this->bouncers[] = $authenticationBouncer;
         $this->bouncers[] = $roleBouncer;
         $this->bouncers[] = $ownerBouncer;
@@ -21,10 +25,8 @@ class Security implements SecurityInterface
 
     public function isAllowed($entityOrClass)
     {
-        foreach ($this->bouncers as $bouncer)
-        {
-            if (!$bouncer->check($entityOrClass))
-            {
+        foreach ($this->bouncers as $bouncer) {
+            if (!$bouncer->check($entityOrClass)) {
                 return false;
             }
         }
