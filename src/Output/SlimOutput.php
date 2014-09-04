@@ -1,11 +1,11 @@
 <?php
 
-namespace Fortune\Output\Driver;
+namespace Fortune\Output;
 
 use Slim\Http\Response;
 use Fortune\Output\BaseOutput;
 use Fortune\Serializer\SerializerInterface;
-use Fortune\Resource\ResourceInterface;
+use Fortune\ResourceInterface;
 
 class SlimOutput extends BaseOutput
 {

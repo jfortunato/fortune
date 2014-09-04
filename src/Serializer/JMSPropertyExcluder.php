@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Serializer\Driver;
+namespace Fortune\Serializer;
 
 use JMS\Serializer\Exclusion\ExclusionStrategyInterface;
 use JMS\Serializer\Metadata\ClassMetadata;

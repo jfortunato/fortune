@@ -3,7 +3,7 @@
 namespace Fortune\Output;
 
 use Fortune\Serializer\SerializerInterface;
-use Fortune\Resource\ResourceInterface;
+use Fortune\ResourceInterface;
 
 abstract class BaseOutput
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Resource;
+namespace Fortune;
 
 interface ResourceInterface
 {

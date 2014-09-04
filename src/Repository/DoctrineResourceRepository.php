@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Repository\Driver;
+namespace Fortune\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Fortune\Repository\ResourceRepositoryInterface;

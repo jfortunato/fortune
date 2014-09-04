@@ -3,7 +3,7 @@
 namespace test\Fortune\Repository;
 
 use test\Fortune\TestCase;
-use Fortune\Repository\Driver\DoctrineResourceRepository;
+use Fortune\Repository\DoctrineResourceRepository;
 
 class DoctrineResourceRepositoryTest extends TestCase
 {

@@ -1,5 +1,9 @@
 <?php
 
+use Fortune\Configuration\Configuration;
+use Fortune\Configuration\ResourceConfiguration;
+use Fortune\ResourceFactory;
+
 require_once __DIR__ . '/../../../_bootstrap/bootstrap.php';
 
 $container = new Fortune\Test\Container;
@@ -28,8 +32,25 @@ if (isset($_GET['requiresOwner'])) {
 }
 
 $app = $container->getSlim();
+
+$configuration = new Configuration(array(
+    array(
+        'name' => 'dogs',
+        'entity' => 'Fortune\Test\Entity\Dog',
+        'validator' => 'Fortune\Test\Validator\DogValidator',
+    ),
+    array(
+        'name' => 'puppies',
+        'entity' => 'Fortune\Test\Entity\Puppy',
+        'validator' => 'Fortune\Test\Validator\PuppyValidator',
+        'parent' => 'dogs',
+    ),
+));
+
+$factory = new ResourceFactory($app->doctrine, $configuration);
+$output = $factory->newSlimOutput($app->response);
+
 parse_str($app->request->getBody(), $input);
-$output = $app->output;
 
 $app->get('/dogs', function () use ($output)
 {

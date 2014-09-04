@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Security\Bouncer\Driver;
+namespace Fortune\Security\Bouncer;
 
 use Fortune\Security\Bouncer\AuthenticationBouncer;
 

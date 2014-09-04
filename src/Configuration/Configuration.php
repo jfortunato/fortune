@@ -6,7 +6,22 @@ class Configuration
 {
     protected $resourceConfigurations = array();
 
-    protected $resourceCreator;
+    public function __construct(array $resources = null)
+    {
+        if ($resources) {
+            foreach ($resources as $resource) {
+                $name = $entity = $validator = $parent = '';
+                extract($resource);
+
+                $this->addResourceConfiguration(new ResourceConfiguration(
+                    $name,
+                    $entity,
+                    $validator,
+                    $parent
+                ));
+            }
+        }
+    }
 
     public function addResourceConfiguration(ResourceConfiguration $resourceConfiguration)
     {

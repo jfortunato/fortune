@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Output\Driver;
+namespace Fortune\Output;
 
 use Fortune\Output\BaseOutput;
 
