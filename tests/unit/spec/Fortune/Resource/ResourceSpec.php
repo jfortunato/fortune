@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\Fortune\Resource;
+namespace spec\Fortune;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -9,12 +9,13 @@ use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
 use Fortune\Resource\Creator\ResourceCreator;
 use Fortune\Configuration\Configuration;
+use Fortune\ResourceFactory;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security, Configuration $config, ResourceCreator $resourceCreator)
+    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security, ResourceFactory $resourceFactory)
     {
-        $this->beConstructedWith($repository, $validator, $security, $config, $resourceCreator);
+        $this->beConstructedWith($repository, $validator, $security, $resourceFactory);
     }
 
     function it_is_initializable()
