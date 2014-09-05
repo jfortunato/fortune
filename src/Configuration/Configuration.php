@@ -6,7 +6,14 @@ class Configuration
 {
     protected $resourceConfigurations = array();
 
-    protected $resourceCreator;
+    public function __construct(array $resources = null)
+    {
+        if ($resources) {
+            foreach ($resources as $resource) {
+                $this->addResourceConfiguration(new ResourceConfiguration($resource));
+            }
+        }
+    }
 
     public function addResourceConfiguration(ResourceConfiguration $resourceConfiguration)
     {

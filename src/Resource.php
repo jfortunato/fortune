@@ -1,12 +1,10 @@
 <?php
 
-namespace Fortune\Resource;
+namespace Fortune;
 
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
-use Fortune\Configuration\Configuration;
-use Fortune\Resource\Creator\ResourceCreator;
 
 class Resource implements ResourceInterface
 {
@@ -14,26 +12,20 @@ class Resource implements ResourceInterface
 
     protected $validator;
 
-    protected $resources;
-
     protected $security;
 
-    protected $config;
-
-    protected $resourceCreator;
+    protected $resourceFactory;
 
     public function __construct(
         ResourceRepositoryInterface $repository,
         ResourceValidatorInterface $validator,
         SecurityInterface $security,
-        Configuration $config,
-        ResourceCreator $resourceCreator
+        ResourceFactory $resourceFactory
     ) {
         $this->repository = $repository;
         $this->validator = $validator;
         $this->security = $security;
-        $this->config = $config;
-        $this->resourceCreator = $resourceCreator;
+        $this->resourceFactory = $resourceFactory;
     }
 
     public function all()
@@ -43,7 +35,8 @@ class Resource implements ResourceInterface
 
     public function allByParent($parentId)
     {
-        $entityProperty = $this->config->getCurrentResourceConfiguration()->getParentEntityProperty();
+        $entityProperty = $this->resourceFactory->getConfig()
+            ->getCurrentResourceConfiguration()->getParentEntityProperty();
 
         return $this->repository->findBy(array($entityProperty => $parentId));
     }
@@ -55,7 +48,8 @@ class Resource implements ResourceInterface
 
     public function singleByParent($parentId, $id)
     {
-        $entityProperty = $this->config->getCurrentResourceConfiguration()->getParentEntityProperty();
+        $entityProperty = $this->resourceFactory->getConfig()
+            ->getCurrentResourceConfiguration()->getParentEntityProperty();
 
         return $this->repository->findOneBy(array('id' => $id, $entityProperty => $parentId));
     }
@@ -67,11 +61,12 @@ class Resource implements ResourceInterface
 
     public function createWithParent($parentId, array $input)
     {
-        $childResourceConfig = $this->config->getCurrentResourceConfiguration();
+        $childResourceConfig = $this->resourceFactory->getConfig()
+            ->getCurrentResourceConfiguration();
 
         $entityProperty = $childResourceConfig->getParentEntityProperty();
 
-        $parentResource = $this->resourceCreator->create($childResourceConfig->getParent());
+        $parentResource = $this->resourceFactory->resourceFor($childResourceConfig->getParent());
 
         $input[$entityProperty] = $parentResource->single($parentId);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Serializer\Driver;
+namespace Fortune\Serializer;
 
 use JMS\Serializer\Serializer;
 use Fortune\Serializer\SerializerInterface;

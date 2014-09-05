@@ -4,20 +4,11 @@ namespace Fortune\Configuration;
 
 class ResourceConfiguration
 {
-    protected $resource = 'dogs';
+    protected $config;
 
-    protected $entityClass = 'Fortune\Test\Entity\Dog';
-
-    protected $validatorClass = 'Fortune\Test\Validator\DogValidator';
-
-    protected $parent;
-
-    public function __construct($resource = null, $entityClass = null, $validatorClass = null, $parent = null)
+    public function __construct(array $config)
     {
-        $this->resource = $resource;
-        $this->entityClass = $entityClass;
-        $this->validatorClass = $validatorClass;
-        $this->parent = $parent;
+        $this->config = $config;
     }
 
     /**
@@ -27,7 +18,7 @@ class ResourceConfiguration
      */
     public function getResource()
     {
-        return $this->resource;
+        return $this->config['name'];
     }
 
     /**
@@ -37,7 +28,7 @@ class ResourceConfiguration
      */
     public function getEntityClass()
     {
-        return $this->entityClass;
+        return $this->config['entity'];
     }
 
     /**
@@ -49,7 +40,7 @@ class ResourceConfiguration
      */
     public function setEntityClass($entityClass)
     {
-        $this->entityClass = $entityClass;
+        $this->config['entity'] = $entityClass;
         return $this;
     }
 
@@ -60,7 +51,7 @@ class ResourceConfiguration
      */
     public function getValidatorClass()
     {
-        return $this->validatorClass;
+        return $this->config['validator'];
     }
 
     /**
@@ -70,7 +61,7 @@ class ResourceConfiguration
      */
     public function getParent()
     {
-        return $this->parent;
+        return $this->config['parent'];
     }
 
     /**
@@ -82,7 +73,7 @@ class ResourceConfiguration
      */
     public function setParent($parent)
     {
-        $this->parent = $parent;
+        $this->config['parent'] = $parent;
         return $this;
     }
 
@@ -96,5 +87,23 @@ class ResourceConfiguration
 
         return $reflection->hasProperty($this->getParent())
             ? $this->getParent() : preg_replace('/s$/', '', $this->getParent());
+    }
+
+    public function requiresAuthentication()
+    {
+        return isset($this->config['access_control']['authentication']) ?
+            $this->config['access_control']['authentication'] : false;
+    }
+
+    public function requiresRole()
+    {
+        return isset($this->config['access_control']['role']) ?
+            $this->config['access_control']['role'] : null;
+    }
+
+    public function requiresOwner()
+    {
+        return isset($this->config['access_control']['owner']) ?
+            $this->config['access_control']['owner'] : false;
     }
 }

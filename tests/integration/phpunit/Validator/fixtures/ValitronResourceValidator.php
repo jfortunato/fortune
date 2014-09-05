@@ -2,7 +2,7 @@
 
 namespace test\Fortune\Validator\fixtures;
 
-use Fortune\Validator\Driver\ValitronResourceValidator as BaseValidator;
+use Fortune\Validator\ValitronResourceValidator as BaseValidator;
 use Valitron\Validator;
 
 class ValitronResourceValidator extends BaseValidator

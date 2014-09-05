@@ -12,6 +12,11 @@ class PuppyFixture {
 
 class ResourceConfigurationSpec extends ObjectBehavior
 {
+    function let()
+    {
+        $this->beConstructedWith(array());
+    }
+
     function it_is_initializable()
     {
         $this->shouldHaveType('Fortune\Configuration\ResourceConfiguration');

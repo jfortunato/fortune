@@ -1,6 +1,6 @@
 <?php
 
-namespace Fortune\Validator\Driver;
+namespace Fortune\Validator;
 
 use Fortune\Validator\ResourceValidatorInterface;
 use Valitron\Validator;

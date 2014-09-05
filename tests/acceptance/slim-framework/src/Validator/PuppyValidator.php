@@ -2,10 +2,10 @@
 
 namespace Fortune\Test\Validator;
 
-use Fortune\Validator\Driver\ValitronResourceValidator;
+use Fortune\Validator\ValitronResourceValidator;
 use Valitron\Validator;
 
-class DogValidator extends ValitronResourceValidator
+class PuppyValidator extends ValitronResourceValidator
 {
     protected $rules = [
         'required' => 'name',
