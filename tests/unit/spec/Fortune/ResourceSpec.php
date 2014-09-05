@@ -53,15 +53,11 @@ class ResourceSpec extends ObjectBehavior
 
     function it_can_check_security($security)
     {
-        $security->isAllowed(null)->shouldBeCalled()->willReturn(true);
+        $security->isAllowed()->shouldBeCalled()->willReturn(true);
         $this->passesSecurity()->shouldReturn(true);
 
-        $security->isAllowed(null)->shouldBeCalled()->willReturn(false);
+        $security->isAllowed()->shouldBeCalled()->willReturn(false);
         $this->passesSecurity()->shouldReturn(false);
-
-        $entity = new \StdClass;
-        $security->isAllowed($entity)->shouldBeCalled()->willReturn(true);
-        $this->passesSecurity($entity)->shouldReturn(true);
     }
 
     function it_can_check_validation($validator)

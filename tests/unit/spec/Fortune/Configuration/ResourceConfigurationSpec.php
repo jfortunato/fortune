@@ -14,7 +14,7 @@ class ResourceConfigurationSpec extends ObjectBehavior
 {
     function let()
     {
-        $this->beConstructedWith(array());
+        $this->beConstructedWith('foo', array());
     }
 
     function it_is_initializable()
