@@ -3,7 +3,7 @@
 namespace Fortune\Configuration;
 
 /**
- * Configuration
+ * Container and locator for a collection of ResourceConfiguration objects.
  *
  * @package Fortune
  */

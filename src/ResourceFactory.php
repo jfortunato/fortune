@@ -23,18 +23,45 @@ use Fortune\Security\Bouncer\SimpleOwnerBouncer;
 use Fortune\Repository\DoctrineResourceRepository;
 use Slim\Http\Request;
 
+/**
+ * Factory for creating this packages objects.
+ *
+ * @package Fortune
+ */
 class ResourceFactory
 {
+    /**
+     * Depending preffered database connection.
+     *
+     * @var EntityManager|PDO
+     */
     protected $database;
 
+    /**
+     * Holds all the ResourceConfiguration objects
+     *
+     * @var Configuration
+     */
     protected $config;
 
+    /**
+     * Constructor
+     *
+     * @param mixed $database
+     * @param Configuration $config
+     * @return void
+     */
     public function __construct($database, Configuration $config)
     {
         $this->database = $database;
         $this->config = $config;
     }
 
+    /**
+     * Creates a SimpleOutput instance to be used with native PHP.
+     *
+     * @return SimpleOutput
+     */
     public function newSimpleOutput()
     {
         return new SimpleOutput(
@@ -43,6 +70,13 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Creates a SlimOutput instance to be used with the slim PHP framework.
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return SlimOutput
+     */
     public function newSlimOutput(Request $request, Response $response)
     {
         return new SlimOutput(
@@ -53,11 +87,22 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Getter for Configuration
+     *
+     * @return Configuration
+     */
     public function getConfig()
     {
         return $this->config;
     }
 
+    /**
+     * Finds a ResourceConfiguration for given resource name.
+     *
+     * @param string $resourceName
+     * @return ResourceConfiguration
+     */
     public function resourceFor($resourceName)
     {
         $resourceConfig = $this->config->resourceConfigurationFor($resourceName);
@@ -65,16 +110,37 @@ class ResourceFactory
         return $this->newResource($resourceConfig);
     }
 
+    /**
+     * Repository to be used for doctrine.
+     *
+     * @param EntityManager $manager
+     * @param string $entityClass
+     * @return DoctrineResourceRepository
+     */
     protected function newDoctrineRepository(EntityManager $manager, $entityClass)
     {
         return new DoctrineResourceRepository($manager, $entityClass);
     }
 
+    /**
+     * Repository to be used for PDO
+     *
+     * @param PDO $pdo
+     * @param mixed $entityClass
+     * @return PdoResourceRepository
+     */
     protected function newPdoRepository(PDO $pdo, $entityClass)
     {
         return new PdoResourceRepository($pdo, $entityClass);
     }
 
+    /**
+     * Determines which repository to use based on the database connection
+     * that was passed in.
+     *
+     * @param string $entityClass
+     * @return ResourceRepositoryInterface
+     */
     protected function newRepository($entityClass)
     {
         if ($this->database instanceof EntityManager) {
@@ -86,6 +152,11 @@ class ResourceFactory
         throw new \Exception("Couldn't determine database connection type.");
     }
 
+    /**
+     * Creates JMSSerializer instance.
+     *
+     * @return JMSSerializer
+     */
     protected function newSerializer()
     {
         return new JMSSerializer(
@@ -95,6 +166,12 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Creates a new Resource based off its ResourceConfiguration
+     *
+     * @param ResourceConfiguration $config
+     * @return Resource
+     */
     protected function newResource(ResourceConfiguration $config)
     {
         $validatorClass = $config->getValidatorClass();
@@ -107,6 +184,11 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Creates a Security gateway with all Bouncers
+     *
+     * @return Security
+     */
     protected function newSecurity()
     {
         $config = $this->config->getCurrentResourceConfiguration();
