@@ -4,9 +4,17 @@ namespace Fortune\Security\Bouncer;
 
 use Fortune\Security\Bouncer\OwnerBouncer;
 
+/**
+ * Implementation of OwnerBouncer
+ *
+ * @package Fortune
+ */
 class SimpleOwnerBouncer extends OwnerBouncer
 {
-    public function isOwner($entity)
+    /**
+     * @Override
+     */
+    public function isOwner()
     {
         return isset($_SESSION['username']);
     }

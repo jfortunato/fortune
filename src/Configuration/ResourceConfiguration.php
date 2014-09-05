@@ -2,12 +2,34 @@
 
 namespace Fortune\Configuration;
 
+/**
+ * Holds the user provided configuration for a single resource.
+ *
+ * @package Fortune
+ */
 class ResourceConfiguration
 {
+    /**
+     * The identifier of the resource.
+     *
+     * @var string
+     */
     protected $resourceName;
 
+    /**
+     * The configuration of a resource.
+     *
+     * @var array
+     */
     protected $config;
 
+    /**
+     * Constructor
+     *
+     * @param string $resourceName
+     * @param array $config
+     * @return void
+     */
     public function __construct($resourceName, array $config)
     {
         $this->resourceName = $resourceName;
@@ -15,7 +37,7 @@ class ResourceConfiguration
     }
 
     /**
-     * Gets the value of resource
+     * Gets the value of resourceName
      *
      * @return string
      */
@@ -25,7 +47,7 @@ class ResourceConfiguration
     }
 
     /**
-     * Gets the value of entityClass
+     * Gets the entity class from config.
      *
      * @return string|null
      */
@@ -35,9 +57,9 @@ class ResourceConfiguration
     }
 
     /**
-     * Sets the value of EntityClass
+     * Sets the entity class in config.
      *
-     * @param $entityClass description
+     * @param $entityClass
      *
      * @return ResourceConfiguration
      */
@@ -48,7 +70,7 @@ class ResourceConfiguration
     }
 
     /**
-     * Gets the value of validatorClass
+     * Gets the validator class from config.
      *
      * @return string|null
      */
@@ -58,7 +80,7 @@ class ResourceConfiguration
     }
 
     /**
-     * Gets the value of parent
+     * Gets the parent resource if available.
      *
      * @return string|null
      */
@@ -68,9 +90,9 @@ class ResourceConfiguration
     }
 
     /**
-     * Sets the value of parent
+     * Sets the parent resource in config.
      *
-     * @param $parent description
+     * @param $parent
      *
      * @return ResourceConfiguration
      */
@@ -80,6 +102,11 @@ class ResourceConfiguration
         return $this;
     }
 
+    /**
+     * Reads the entity class for its parents relation attr name.
+     *
+     * @return string
+     */
     public function getParentEntityProperty()
     {
         // the parent resource may be pluralized
@@ -92,18 +119,33 @@ class ResourceConfiguration
             ? $this->getParent() : preg_replace('/s$/', '', $this->getParent());
     }
 
+    /**
+     * Checks config to determine if auth is required for access to resource.
+     *
+     * @return boolean
+     */
     public function requiresAuthentication()
     {
         return isset($this->config['access_control']['authentication']) ?
             $this->config['access_control']['authentication'] : false;
     }
 
+    /**
+     * Checks config to determine if a role is required for access to resource.
+     *
+     * @return string|null either a certain role that's required or null.
+     */
     public function requiresRole()
     {
         return isset($this->config['access_control']['role']) ?
             $this->config['access_control']['role'] : null;
     }
 
+    /**
+     * Checks config to determine if owner is required for access to resource.
+     *
+     * @return boolean
+     */
     public function requiresOwner()
     {
         return isset($this->config['access_control']['owner']) ?

@@ -4,19 +4,36 @@ namespace Fortune\Security\Bouncer;
 
 use Fortune\Configuration\ResourceConfiguration;
 
+/**
+ * A base class for all bouncers.
+ *
+ * @package Fortune
+ */
 abstract class Bouncer
 {
-    abstract public function check($entityOrClass);
+    /**
+     * Derived classes determine how they should judge if a
+     * resource should be accessible.
+     *
+     * @return boolean
+     */
+    abstract public function check();
 
+    /**
+     * A ResourceConfiguration for a single resource.
+     *
+     * @var ResourceConfiguration
+     */
     protected $config;
 
+    /**
+     * Constructor
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     public function __construct(ResourceConfiguration $config)
     {
         $this->config = $config;
-    }
-
-    protected function getEntityClass($entityOrClass)
-    {
-        return is_object($entityOrClass) ? get_class($entityOrClass):$entityOrClass;
     }
 }

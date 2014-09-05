@@ -2,13 +2,26 @@
 
 namespace Fortune\Security\Bouncer;
 
+/**
+ * Determines resource accessibility based on login status. Subclass
+ * determines implementaion.
+ *
+ * @package Fortune
+ */
 abstract class AuthenticationBouncer extends Bouncer
 {
+    /**
+     * Determine if user is authenticated.
+     *
+     * @return boolean
+     */
     abstract public function isAuthenticated();
 
-    public function check($entityOrClass)
+    /**
+     * @Override
+     */
+    public function check()
     {
-        return $this->config->requiresAuthentication($this->getEntityClass($entityOrClass)) ?
-            $this->isAuthenticated() : true;
+        return $this->config->requiresAuthentication() ?  $this->isAuthenticated() : true;
     }
 }

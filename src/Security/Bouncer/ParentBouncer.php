@@ -4,13 +4,27 @@ namespace Fortune\Security\Bouncer;
 
 use Fortune\Configuration\ResourceConfiguration;
 
+/**
+ * Checks if the resource has a parent and if so makes sure the route
+ * contains parent.
+ *
+ * @package Fortune
+ */
 class ParentBouncer extends Bouncer
 {
-    public function check($entityOrClass)
+    /**
+     * @Override
+     */
+    public function check()
     {
         return $this->config->getParent() ? $this->routeContainsParent():true;
     }
 
+    /**
+     * Checks if the current route contains the parents id.
+     *
+     * @return boolean
+     */
     protected function routeContainsParent()
     {
         // get just the base url

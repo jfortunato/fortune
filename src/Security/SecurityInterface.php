@@ -4,5 +4,10 @@ namespace Fortune\Security;
 
 interface SecurityInterface
 {
-    public function isAllowed($entityOrClass);
+    /**
+     * Checks all security mechanisms to determine if resource is accessible.
+     *
+     * @return boolean
+     */
+    public function isAllowed();
 }

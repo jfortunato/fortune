@@ -2,13 +2,28 @@
 
 namespace Fortune\Security\Bouncer;
 
+/**
+ * Determines resource accessibility based user role. Subclass
+ * determines implementaion.
+ *
+ * @package Fortune
+ */
 abstract class RoleBouncer extends Bouncer
 {
+    /**
+     * Checks if user has a certain role.
+     *
+     * @param string $role
+     * @return boolean
+     */
     abstract public function hasRole($role);
 
-    public function check($entityOrClass)
+    /**
+     * @Override
+     */
+    public function check()
     {
-        $role = $this->config->requiresRole($this->getEntityClass($entityOrClass));
+        $role = $this->config->requiresRole();
 
         return $role ? $this->hasRole($role):true;
     }

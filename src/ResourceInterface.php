@@ -4,14 +4,84 @@ namespace Fortune;
 
 interface ResourceInterface
 {
+    /**
+     * Finds all of a resource
+     *
+     * @return array
+     */
     public function all();
+
+    /**
+     * Finds all of a resource based on its parent relation.
+     *
+     * @param int $parentId
+     * @return array
+     */
     public function allByParent($parentId);
+
+    /**
+     * Finds a single resource.
+     *
+     * @param int $id
+     * @return object
+     */
     public function single($id);
+
+    /**
+     * Finds a single resource based on its parent relation.
+     *
+     * @param int $parentId
+     * @param int $id
+     * @return object
+     */
     public function singleByParent($parentId, $id);
+
+    /**
+     * Creates a new resource.
+     *
+     * @param array $input
+     * @return object
+     */
     public function create(array $input);
+
+    /**
+     * Creates a new resource with a parent relation.
+     *
+     * @param int $parentId
+     * @param int $input
+     * @return object
+     */
     public function createWithParent($parentId, array $input);
+
+    /**
+     * Updates an existing resource with $input.
+     *
+     * @param int $id
+     * @param array $input
+     * @return object
+     */
     public function update($id, array $input);
+
+    /**
+     * Deletes a resource.
+     *
+     * @param int $id
+     * @return void
+     */
     public function delete($id);
-    public function passesSecurity($entity = null);
+
+    /**
+     * Check if user passes resource security.
+     *
+     * @return boolean
+     */
+    public function passesSecurity();
+
+    /**
+     * Check if $input passes resource validation.
+     *
+     * @param array $input
+     * @return boolean
+     */
     public function passesValidation(array $input);
 }

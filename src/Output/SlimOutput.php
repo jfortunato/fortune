@@ -10,10 +10,29 @@ use Fortune\ResourceInterface;
 
 class SlimOutput extends BaseOutput
 {
-    protected $response;
-
+    /**
+     * The slim Request object
+     *
+     * @var Request
+     */
     protected $request;
 
+    /**
+     * The slim Response object
+     *
+     * @var Response
+     */
+    protected $response;
+
+    /**
+     * Constructor
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param SerializerInterface $serializer
+     * @param ResourceInterface $resource
+     * @return void
+     */
     public function __construct(
         Request $request,
         Response $response,
@@ -26,21 +45,33 @@ class SlimOutput extends BaseOutput
         parent::__construct($serializer, $resource);
     }
 
+    /**
+     * @Override
+     */
     protected function setJsonHeader()
     {
         $this->response->headers->set('Content-Type', 'application/json');
     }
 
+    /**
+     * @Override
+     */
     protected function setStatusCode($code)
     {
         $this->response->setStatus($code);
     }
 
+    /**
+     * @Override
+     */
     protected function content($serializedContent)
     {
         return $serializedContent;
     }
 
+    /**
+     * @Override
+     */
     protected function getInput()
     {
         parse_str($this->request->getBody(), $input);
