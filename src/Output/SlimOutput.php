@@ -2,6 +2,7 @@
 
 namespace Fortune\Output;
 
+use Slim\Http\Request;
 use Slim\Http\Response;
 use Fortune\Output\BaseOutput;
 use Fortune\Serializer\SerializerInterface;
@@ -11,8 +12,15 @@ class SlimOutput extends BaseOutput
 {
     protected $response;
 
-    public function __construct(Response $response, SerializerInterface $serializer, ResourceInterface $resource)
-    {
+    protected $request;
+
+    public function __construct(
+        Request $request,
+        Response $response,
+        SerializerInterface $serializer,
+        ResourceInterface $resource
+    ) {
+        $this->request = $request;
         $this->response = $response;
 
         parent::__construct($serializer, $resource);
@@ -31,5 +39,12 @@ class SlimOutput extends BaseOutput
     protected function content($serializedContent)
     {
         return $serializedContent;
+    }
+
+    protected function getInput()
+    {
+        parse_str($this->request->getBody(), $input);
+
+        return $input;
     }
 }

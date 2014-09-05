@@ -21,6 +21,7 @@ use Fortune\Security\Bouncer\SimpleAuthenticationBouncer;
 use Fortune\Security\Bouncer\SimpleRoleBouncer;
 use Fortune\Security\Bouncer\SimpleOwnerBouncer;
 use Fortune\Repository\DoctrineResourceRepository;
+use Slim\Http\Request;
 
 class ResourceFactory
 {
@@ -42,9 +43,10 @@ class ResourceFactory
         );
     }
 
-    public function newSlimOutput(Response $response)
+    public function newSlimOutput(Request $request, Response $response)
     {
         return new SlimOutput(
+            $request,
             $response,
             $this->newSerializer(),
             $this->newResource($this->config->getCurrentResourceConfiguration())

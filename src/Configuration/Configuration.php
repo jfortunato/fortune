@@ -9,8 +9,8 @@ class Configuration
     public function __construct(array $resources = null)
     {
         if ($resources) {
-            foreach ($resources as $resource) {
-                $this->addResourceConfiguration(new ResourceConfiguration($resource));
+            foreach ($resources as $resource => $config) {
+                $this->addResourceConfiguration(new ResourceConfiguration($resource, $config));
             }
         }
     }

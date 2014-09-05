@@ -4,10 +4,13 @@ namespace Fortune\Configuration;
 
 class ResourceConfiguration
 {
+    protected $resourceName;
+
     protected $config;
 
-    public function __construct(array $config)
+    public function __construct($resourceName, array $config)
     {
+        $this->resourceName = $resourceName;
         $this->config = $config;
     }
 
@@ -18,7 +21,7 @@ class ResourceConfiguration
      */
     public function getResource()
     {
-        return $this->config['name'];
+        return $this->resourceName;
     }
 
     /**

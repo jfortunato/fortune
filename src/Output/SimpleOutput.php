@@ -20,4 +20,9 @@ class SimpleOutput extends BaseOutput
     {
         return $serializedContent;
     }
+
+    protected function getInput()
+    {
+        return $_POST;
+    }
 }

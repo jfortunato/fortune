@@ -10,6 +10,7 @@ abstract class BaseOutput
     abstract protected function setJsonHeader();
     abstract protected function setStatusCode($code);
     abstract protected function content($serializedContent);
+    abstract protected function getInput();
 
     protected $serializer;
 
@@ -81,11 +82,13 @@ abstract class BaseOutput
         return $this->response($entity, 200);
     }
 
-    public function create(array $input, $parentId = null)
+    public function create($parentId = null)
     {
         if ($this->failsSecurity()) {
             return $this->responseDenied();
         }
+
+        $input = $this->getInput();
 
         if ($this->failsValidation($input)) {
             return $this->responseBadInput();
@@ -96,7 +99,7 @@ abstract class BaseOutput
         return $this->response($entity, 201);
     }
 
-    public function update($id, array $input, $parentId = null)
+    public function update($id, $parentId = null)
     {
         $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
 
@@ -107,6 +110,8 @@ abstract class BaseOutput
         if (!$entity) {
             return $this->responseNotFound();
         }
+
+        $input = $this->getInput();
 
         if ($this->failsValidation($input)) {
             return $this->responseBadInput();

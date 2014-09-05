@@ -25,8 +25,7 @@ $container = new Container;
 $app = new Slim;
 
 $configuration = new Configuration(array(
-    array(
-        'name'               => 'dogs',
+    'dogs'      => array(
         'entity'             => 'Fortune\Test\Entity\Dog',
         'validator'          => 'Fortune\Test\Validator\DogValidator',
         'parent'             => '',
@@ -36,8 +35,7 @@ $configuration = new Configuration(array(
             'owner'             => $requiresOwner,
         ),
     ),
-    array(
-        'name'               => 'puppies',
+    'puppies'   => array(
         'entity'             => 'Fortune\Test\Entity\Puppy',
         'validator'          => 'Fortune\Test\Validator\PuppyValidator',
         'parent'             => 'dogs',
@@ -45,24 +43,22 @@ $configuration = new Configuration(array(
 ));
 
 $factory = new ResourceFactory($container->doctrine, $configuration);
-$output = $factory->newSlimOutput($app->response);
-
-parse_str($app->request->getBody(), $input);
+$output = $factory->newSlimOutput($app->request, $app->response);
 
 $app->get('/dogs', function () use ($output) {
     echo $output->index();
 });
 
-$app->post('/dogs', function () use ($output, $input) {
-    echo $output->create($input);
+$app->post('/dogs', function () use ($output) {
+    echo $output->create();
 });
 
 $app->get('/dogs/:id', function ($id) use ($output) {
     echo $output->show($id);
 });
 
-$app->put('/dogs/:id', function ($id) use ($output, $input) {
-    echo $output->update($id, $input);
+$app->put('/dogs/:id', function ($id) use ($output) {
+    echo $output->update($id);
 });
 
 $app->delete('/dogs/:id', function ($id) use ($output) {
@@ -82,12 +78,12 @@ $app->get('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
     echo $output->show($id, $dog);
 });
 
-$app->post('/dogs/:dog/puppies', function ($dog) use ($output, $input) {
-    echo $output->create($input, $dog);
+$app->post('/dogs/:dog/puppies', function ($dog) use ($output) {
+    echo $output->create($dog);
 });
 
-$app->put('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output, $input) {
-    echo $output->update($id, $input, $dog);
+$app->put('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
+    echo $output->update($id, $dog);
 });
 
 $app->delete('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
