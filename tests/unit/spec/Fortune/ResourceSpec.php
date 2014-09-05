@@ -20,7 +20,7 @@ class ResourceSpec extends ObjectBehavior
 
     function it_is_initializable()
     {
-        $this->shouldHaveType('Fortune\Resource\Resource');
+        $this->shouldHaveType('Fortune\Resource');
     }
 
     function it_can_get_all_entities($repository)

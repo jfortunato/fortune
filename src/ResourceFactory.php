@@ -107,13 +107,13 @@ class ResourceFactory
 
     protected function newSecurity()
     {
-        $inspector = new ResourceInspector;
+        $config = $this->config->getCurrentResourceConfiguration();
 
         return new Security(
-            new SimpleAuthenticationBouncer($inspector),
-            new SimpleRoleBouncer($inspector),
-            new SimpleOwnerBouncer($inspector),
-            new ParentBouncer($inspector, $this->config->getCurrentResourceConfiguration())
+            new SimpleAuthenticationBouncer($config),
+            new SimpleRoleBouncer($config),
+            new SimpleOwnerBouncer($config),
+            new ParentBouncer($config)
         );
     }
 }

@@ -27,7 +27,7 @@
     "autoload-dev": {
         "classmap": ["tests/_bootstrap"],
         "psr-4": {
-            "Fortune\\Test\\": "tests/acceptance/app-bootstrap/src/",
+            "Fortune\\Test\\": "tests/acceptance/slim-framework/src/",
             "test\\Fortune\\": "tests/integration/phpunit/"
         }
     }

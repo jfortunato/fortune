@@ -8,7 +8,7 @@ abstract class OwnerBouncer extends Bouncer
 
     public function check($entityOrClass)
     {
-        return $this->inspector->requiresOwner($this->getEntityClass($entityOrClass)) ?
+        return $this->config->requiresOwner($this->getEntityClass($entityOrClass)) ?
             $this->isOwner($entityOrClass) : true;
     }
 }

@@ -2,17 +2,17 @@
 
 namespace Fortune\Security\Bouncer;
 
-use Fortune\Security\ResourceInspectorInterface;
+use Fortune\Configuration\ResourceConfiguration;
 
 abstract class Bouncer
 {
     abstract public function check($entityOrClass);
 
-    protected $inspector;
+    protected $config;
 
-    public function __construct(ResourceInspectorInterface $inspector)
+    public function __construct(ResourceConfiguration $config)
     {
-        $this->inspector = $inspector;
+        $this->config = $config;
     }
 
     protected function getEntityClass($entityOrClass)
