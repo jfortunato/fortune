@@ -22,6 +22,8 @@ use Fortune\Security\Bouncer\SimpleRoleBouncer;
 use Fortune\Security\Bouncer\SimpleOwnerBouncer;
 use Fortune\Repository\DoctrineResourceRepository;
 use Slim\Http\Request;
+use Slim\Slim;
+use Fortune\Routing\SlimRouteGenerator;
 
 /**
  * Factory for creating this packages objects.
@@ -85,6 +87,15 @@ class ResourceFactory
             $this->newSerializer(),
             $this->newResource($this->config->getCurrentResourceConfiguration())
         );
+    }
+
+    public function generateSlimRoutes(Slim $slim)
+    {
+        $output = $this->newSlimOutput($slim->request, $slim->response);
+
+        $generator = new SlimRouteGenerator($slim, $output, $this->config);
+
+        $generator->generateRoutes();
     }
 
     /**

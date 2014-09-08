@@ -111,4 +111,9 @@ class Configuration
 
         return null;
     }
+
+    public function getResourceConfigurations()
+    {
+        return $this->resourceConfigurations;
+    }
 }

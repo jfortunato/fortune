@@ -27,51 +27,13 @@ $app = new Slim;
 $configuration = require __DIR__ . '/../config/config.php';
 
 $factory = new ResourceFactory($container->doctrine, $configuration);
-$output = $factory->newSlimOutput($app->request, $app->response);
+$factory->generateSlimRoutes($app);
 
-$app->get('/dogs', function () use ($output) {
-    echo $output->index();
-});
-
-$app->post('/dogs', function () use ($output) {
-    echo $output->create();
-});
-
-$app->get('/dogs/:id', function ($id) use ($output) {
-    echo $output->show($id);
-});
-
-$app->put('/dogs/:id', function ($id) use ($output) {
-    echo $output->update($id);
-});
-
-$app->delete('/dogs/:id', function ($id) use ($output) {
-    echo $output->delete($id);
-});
-
-$app->get('/puppies', function () use ($output) {
+// this route is used to test a security feature
+$app->get('/puppies', function () use ($factory, $app) {
     // this should be error
+    $output = $factory->newSlimOutput($app->request, $app->response);
     echo $output->index();
-});
-
-$app->get('/dogs/:dog/puppies', function ($dog) use ($output) {
-    echo $output->index($dog);
-});
-
-$app->get('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
-    echo $output->show($id, $dog);
-});
-
-$app->post('/dogs/:dog/puppies', function ($dog) use ($output) {
-    echo $output->create($dog);
-});
-
-$app->put('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
-    echo $output->update($id, $dog);
-});
-
-$app->delete('/dogs/:dog/puppies/:id', function ($dog, $id) use ($output) {
-    echo $output->delete($id, $dog);
 });
 
 
