@@ -10,9 +10,9 @@ use PDO;
 
 class ResourceFactorySpec extends ObjectBehavior
 {
-    function let(PDO $database, Configuration $config)
+    function let(PDO $database)
     {
-        $this->beConstructedWith($database, $config);
+        $this->beConstructedWith($database, array());
     }
 
     function it_is_initializable()

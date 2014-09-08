@@ -31,6 +31,16 @@ class ResourceContext extends BaseContext
     }
 
     /**
+     * Clean the database before each scenario
+     *
+     * @BeforeScenario
+     */
+    public function beforeScenario($event)
+    {
+        $this->container->dbRecreator->recreateDatabase();
+    }
+
+    /**
      * @Given /^The following dogs exist:$/
      */
     public function theFollowingDogsExist(TableNode $table)

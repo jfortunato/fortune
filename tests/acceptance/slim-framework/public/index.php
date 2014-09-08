@@ -24,23 +24,7 @@ $requiresOwner = isset($_GET['requiresOwner']);
 $container = new Container;
 $app = new Slim;
 
-$configuration = new Configuration(array(
-    'dogs'      => array(
-        'entity'             => 'Fortune\Test\Entity\Dog',
-        'validator'          => 'Fortune\Test\Validator\DogValidator',
-        'parent'             => '',
-        'access_control'     => array(
-            'authentication'    => $requiresAuthentication,
-            'role'              => $requiresRole,
-            'owner'             => $requiresOwner,
-        ),
-    ),
-    'puppies'   => array(
-        'entity'             => 'Fortune\Test\Entity\Puppy',
-        'validator'          => 'Fortune\Test\Validator\PuppyValidator',
-        'parent'             => 'dogs',
-    ),
-));
+$configuration = require __DIR__ . '/../config/config.php';
 
 $factory = new ResourceFactory($container->doctrine, $configuration);
 $output = $factory->newSlimOutput($app->request, $app->response);

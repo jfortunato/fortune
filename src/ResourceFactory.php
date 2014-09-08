@@ -48,13 +48,13 @@ class ResourceFactory
      * Constructor
      *
      * @param mixed $database
-     * @param Configuration $config
+     * @param array $config
      * @return void
      */
-    public function __construct($database, Configuration $config)
+    public function __construct($database, array $config)
     {
         $this->database = $database;
-        $this->config = $config;
+        $this->config = new Configuration($config);
     }
 
     /**

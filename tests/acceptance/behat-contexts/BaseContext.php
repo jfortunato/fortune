@@ -17,14 +17,4 @@ abstract class BaseContext extends BehatContext
     {
         return $this->container->doctrine;
     }
-
-    /**
-     * Clean the database before each scenario
-     *
-     * @BeforeScenario
-     */
-    public function beforeScenario($event)
-    {
-        $this->container->dbRecreator->recreateDatabase();
-    }
 }
