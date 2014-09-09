@@ -5,26 +5,18 @@ use Fortune\Configuration\Configuration;
 use Fortune\Configuration\ResourceConfiguration;
 use Fortune\ResourceFactory;
 use Slim\Slim;
+use Symfony\Component\Yaml\Yaml;
 
 require_once __DIR__ . '/../../../_bootstrap/bootstrap.php';
 
-if (isset($_GET['doLogin'])) {
-    $_SESSION['username'] = 'foo';
-}
-
-if (isset($_GET['haveRole'])) {
-    $_SESSION['role'] = $_GET['haveRole'];
-}
-
-// this is only for testing purposes
-$requiresAuthentication = isset($_GET['requiresAuthentication']);
-$requiresRole = isset($_GET['requiresRole']) ? $_GET['requiresRole'] : null;
-$requiresOwner = isset($_GET['requiresOwner']);
+// for testing..this needs to have better implementation
+if (isset($_GET['doLogin'])) { $_SESSION['username'] = 'foo'; }
+if (isset($_GET['haveRole'])) { $_SESSION['role'] = $_GET['haveRole']; }
 
 $container = new Container;
 $app = new Slim;
 
-$configuration = require __DIR__ . '/../config/config.php';
+$configuration = Yaml::parse(file_get_contents(__DIR__ . '/../../behat-contexts/fixtures/config.yaml'));
 
 $factory = new ResourceFactory($container->doctrine, $configuration);
 $factory->generateSlimRoutes($app);

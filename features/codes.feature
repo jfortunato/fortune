@@ -9,6 +9,17 @@ Feature: Response Codes
             | id | name  |
             | 1  | Fido  |
             | 2  | Daisy |
+        And There is a config file containing the following:
+            """
+            dogs:
+                entity: Fortune\Test\Entity\Dog
+                validator: Fortune\Test\Validator\DogValidator
+                parent: ~
+                access_control:
+                    authentication: false
+                    role: ~
+                    owner: false
+            """
 
     Scenario Outline: 200 OK - when requesting to view resource
         When I send a GET request to "<url>"
@@ -60,7 +71,7 @@ Feature: Response Codes
 
     Scenario Outline: 403 FORBIDDEN - when login is required
         Given I am not logged in
-        And The resource requires authentication
+        And The resource "dogs" requires authentication
         When I send a <method> request to "<url>"
         Then The response code should be 403
         And The error message should contain "Access Denied"
@@ -75,7 +86,7 @@ Feature: Response Codes
     Scenario Outline: 403 FORBIDDEN - when role is required
         Given I am logged in
         But I dont have a role
-        And The resource requires role "admin"
+        And The resource "dogs" requires role "admin"
         When I send a <method> request to "<url>"
         Then The response code should be 403
         And The error message should contain "Access Denied"
@@ -89,7 +100,7 @@ Feature: Response Codes
 
     Scenario Outline: 403 FORBIDDEN - when owner is required
         Given I am not logged in
-        And The resource requires owner for access
+        And The resource "dogs" requires owner for access
         When I send a <method> request to "<url>"
         Then The response code should be 403
         And The error message should contain "Access Denied"

@@ -15,6 +15,21 @@ Feature: Resource Parents
             | 3  | Lizzy |
         And The puppy "Daisy" belongs to dog "Fido"
         And The puppy "Lizzy" belongs to dog "Fido"
+        And There is a config file containing the following:
+            """
+            dogs:
+                entity: Fortune\Test\Entity\Dog
+                validator: Fortune\Test\Validator\DogValidator
+                parent: ~
+                access_control:
+                    authentication: false
+                    role: ~
+                    owner: false
+            puppies:
+                entity: Fortune\Test\Entity\Puppy
+                validator: Fortune\Test\Validator\PuppyValidator
+                parent: dogs
+            """
 
     Scenario: Getting a list of all puppies
         When I send a GET request to "/dogs/1/puppies"

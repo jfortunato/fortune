@@ -3,6 +3,8 @@
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use GuzzleHttp\Client as Guzzle;
+use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Yaml\Dumper;
 
 class ResourceContext extends BaseContext
 {
@@ -209,13 +211,17 @@ class ResourceContext extends BaseContext
     }
 
     /**
-     * @Given /^The resource requires authentication$/
+     * @Given /^The resource "([^"]*)" requires authentication$/
      */
-    public function theResourceRequiresAuthentication()
+    public function theResourceRequiresAuthentication($resource)
     {
-        // we need to change a static variable at application runtime
-        // and we cant do that here so set a flag for the request to handle it
-        $this->query['requiresAuthentication'] = true;
+        $parsed = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/config.yaml'));
+
+        $parsed[$resource]['access_control']['authentication'] = true;
+
+        $dumper = new Dumper;
+
+        file_put_contents(__DIR__ . '/fixtures/config.yaml', $dumper->dump($parsed, 3));
     }
 
     /**
@@ -235,19 +241,32 @@ class ResourceContext extends BaseContext
     }
 
     /**
-     * @Given /^The resource requires role "([^"]*)"$/
+     * @Given /^The resource "([^"]*)" requires role "([^"]*)"$/
      */
-    public function theResourceRequiresRole($role)
+    public function theResourceRequiresRole($resource, $role)
     {
-        $this->query['requiresRole'] = $role;
+        $parsed = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/config.yaml'));
+
+        $parsed[$resource]['access_control']['role'] = $role;
+
+        $dumper = new Dumper;
+
+        file_put_contents(__DIR__ . '/fixtures/config.yaml', $dumper->dump($parsed, 3));
     }
 
     /**
-     * @Given /^The resource requires owner for access$/
+     * @Given /^The resource "([^"]*)" requires owner for access$/
      */
-    public function theResourceRequiresOwnerForAccess()
+    public function theResourceRequiresOwnerForAccess($resource)
     {
-        $this->query['requiresOwner'] = true;
+        $parsed = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/config.yaml'));
+
+        $parsed[$resource]['access_control']['owner'] = true;
+
+        $dumper = new Dumper;
+
+        file_put_contents(__DIR__ . '/fixtures/config.yaml', $dumper->dump($parsed, 3));
+
     }
 
     /**

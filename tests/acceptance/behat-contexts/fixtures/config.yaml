@@ -1,4 +1,0 @@
-dogs:
-    entity: Foo
-    validator: FooValidator
-    access_control: ~

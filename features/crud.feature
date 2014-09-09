@@ -9,6 +9,17 @@ Feature: Resource CRUD Actions
             | id | name  |
             | 1  | Fido  |
             | 2  | Daisy |
+        And There is a config file containing the following:
+            """
+            dogs:
+                entity: Fortune\Test\Entity\Dog
+                validator: Fortune\Test\Validator\DogValidator
+                parent: ~
+                access_control:
+                    authentication: false
+                    role: ~
+                    owner: false
+            """
 
     Scenario: Getting a list of all dogs
         When I send a GET request to "/dogs"

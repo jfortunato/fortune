@@ -1,2 +1,3 @@
 /vendor/
 db.sqlite
+/tests/acceptance/behat-contexts/fixtures/config.yaml
