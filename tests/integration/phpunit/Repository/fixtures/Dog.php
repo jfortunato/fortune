@@ -3,7 +3,7 @@
 namespace test\Fortune\Repository\fixtures;
 
 /**
- * @Entity(repositoryClass="test\Fortune\Repository\fixtures\DogRepository")
+ * @Entity(repositoryClass="Doctrine\ORM\EntityRepository")
  * @Table(name="dogs")
  */
 class Dog

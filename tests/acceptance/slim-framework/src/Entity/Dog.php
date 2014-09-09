@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 
 /**
- * @Entity(repositoryClass="Fortune\Test\Entity\DogRepository")
+ * @Entity(repositoryClass="Doctrine\ORM\EntityRepository")
  * @Table(name="dogs")
  */
 class Dog

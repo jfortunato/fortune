@@ -21,6 +21,10 @@ $configuration = Yaml::parse(file_get_contents(__DIR__ . '/../../behat-contexts/
 $factory = new ResourceFactory($container->doctrine, $configuration);
 $factory->generateSlimRoutes($app);
 
+$app->get('/', function () {
+    echo 'home';
+});
+
 // this route is used to test a security feature
 $app->get('/puppies', function () use ($factory, $app) {
     // this should be error

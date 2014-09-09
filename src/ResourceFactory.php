@@ -91,6 +91,11 @@ class ResourceFactory
 
     public function generateSlimRoutes(Slim $slim)
     {
+        // if we are not on a resources's route, then dont generate any routes
+        if (!$this->config->getCurrentResourceConfiguration()) {
+            return;
+        }
+
         $output = $this->newSlimOutput($slim->request, $slim->response);
 
         $generator = new SlimRouteGenerator($slim, $output, $this->config);

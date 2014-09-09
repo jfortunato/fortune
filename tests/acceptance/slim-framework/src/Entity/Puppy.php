@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
- * @Entity(repositoryClass="Fortune\Test\Entity\PuppyRepository")
+ * @Entity(repositoryClass="Doctrine\ORM\EntityRepository")
  * @Table(name="puppies")
  */
 class Puppy
