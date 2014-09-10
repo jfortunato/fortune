@@ -2,9 +2,11 @@
 
 use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 use GuzzleHttp\Client as Guzzle;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Dumper;
+use Fortune\Configuration\Configuration;
 
 class ResourceContext extends BaseContext
 {
@@ -19,6 +21,12 @@ class ResourceContext extends BaseContext
     protected $body = array();
 
     protected $headers = array();
+
+    protected $configuration;
+
+    protected $resourceConfig;
+
+    protected $parsed;
 
     public function __construct(array $parameters = array())
     {
@@ -309,5 +317,53 @@ class ResourceContext extends BaseContext
     public function theResourceBelongsToResource($child, $parent)
     {
         //throw new PendingException();
+    }
+
+    /**
+     * @Given /^There is a config file containing the following:$/
+     */
+    public function thereIsAConfigFileContainingTheFollowing(PyStringNode $string)
+    {
+        file_put_contents(__DIR__ . '/fixtures/config.yaml', $string);
+
+        if (!file_exists(__DIR__ . '/fixtures/config.yaml')) {
+            throw new Exception("The config.yaml file doesn't exist.");
+        }
+    }
+
+    /**
+     * @When /^I parse the config file$/
+     */
+    public function iParseTheConfigFile()
+    {
+        $this->parsed = Yaml::parse(file_get_contents(__DIR__ . '/fixtures/config.yaml'));
+    }
+
+    /**
+     * @Given /^I send the parsed config to a Configuration object$/
+     */
+    public function iSendTheParsedConfigToAConfigurationObject()
+    {
+        $this->configuration = new Configuration($this->parsed);
+    }
+
+    /**
+     * @Given /^The Configuration should contain the "([^"]*)" ResourceConfiguration$/
+     */
+    public function theConfigurationShouldContainTheResourceconfiguration($resourceName)
+    {
+        $this->resourceConfig = $this->configuration->resourceConfigurationFor($resourceName);
+
+        assertInstanceOf('Fortune\Configuration\ResourceConfiguration', $this->resourceConfig);
+    }
+
+    /**
+     * @Given /^The ResourceConfiguration\'s "([^"]*)" should be "([^"]*)"$/
+     */
+    public function theResourceconfigurationsShouldBe($getter, $value)
+    {
+        $method = "get{$getter}";
+
+        assertSame($value, $this->resourceConfig->$method());
     }
 }

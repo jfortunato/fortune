@@ -1,4 +1,4 @@
-@resource.codes
+@statuscodes
 Feature: Response Codes
     In order to get response feedback from the API
     As a client

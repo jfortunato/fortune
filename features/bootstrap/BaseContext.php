@@ -1,10 +1,13 @@
 <?php
 
-use Behat\Behat\Context\BehatContext;
 use Doctrine\ORM\Tools\SchemaTool;
 use Fortune\Test\Container;
+use Behat\Behat\Context\Context;
 
-abstract class BaseContext extends BehatContext
+require_once 'PHPUnit/Autoload.php';
+require_once 'PHPUnit/Framework/Assert/Functions.php';
+
+abstract class BaseContext implements Context
 {
     protected $container;
 

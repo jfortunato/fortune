@@ -16,7 +16,7 @@ if (isset($_GET['haveRole'])) { $_SESSION['role'] = $_GET['haveRole']; }
 $container = new Container;
 $app = new Slim;
 
-$configuration = Yaml::parse(file_get_contents(__DIR__ . '/../../behat-contexts/fixtures/config.yaml'));
+$configuration = Yaml::parse(file_get_contents(PROJECT_ROOT . '/features/bootstrap/fixtures/config.yaml'));
 
 $factory = new ResourceFactory($container->pdo, $configuration);
 $factory->generateSlimRoutes($app);

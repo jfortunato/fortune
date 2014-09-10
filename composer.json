@@ -11,7 +11,7 @@
         "vlucas/valitron": "~1.1.7"
     },
     "require-dev": {
-        "behat/behat": "2.4.*@stable",
+        "behat/behat": "~3.0",
         "phpspec/phpspec": "~2.0",
         "phpunit/phpunit": "~4.0",
         "guzzlehttp/guzzle": "~4.0",

@@ -1,4 +1,9 @@
 default:
-    paths:
-        features: features
-        bootstrap: tests/acceptance/behat-contexts
+    suites:
+        resource:
+            contexts: [ ResourceContext ]
+    gherkin:
+        filters:
+            tags: ~@wip
+    formatters:
+        progress: ~

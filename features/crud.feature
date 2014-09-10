@@ -1,4 +1,4 @@
-@resource.crud
+@crud
 Feature: Resource CRUD Actions
     In order to keep logic DRY and simplify CRUD for a resource
     As an implementer of this library

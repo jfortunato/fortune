@@ -1,4 +1,4 @@
-@resource.security
+@security
 Feature: Resource Security
     In order to protect a resource
     As a user of this library
