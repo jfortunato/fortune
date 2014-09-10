@@ -75,10 +75,7 @@ class Resource implements ResourceInterface
      */
     public function allByParent($parentId)
     {
-        $entityProperty = $this->resourceFactory->getConfig()
-            ->getCurrentResourceConfiguration()->getParentEntityProperty();
-
-        return $this->repository->findBy(array($entityProperty => $parentId));
+        return $this->repository->findByParent($parentId);
     }
 
     /**
@@ -94,10 +91,7 @@ class Resource implements ResourceInterface
      */
     public function singleByParent($parentId, $id)
     {
-        $entityProperty = $this->resourceFactory->getConfig()
-            ->getCurrentResourceConfiguration()->getParentEntityProperty();
-
-        return $this->repository->findOneBy(array('id' => $id, $entityProperty => $parentId));
+        return $this->repository->findOneByParent($id, $parentId);
     }
 
     /**
@@ -116,13 +110,11 @@ class Resource implements ResourceInterface
         $childResourceConfig = $this->resourceFactory->getConfig()
             ->getCurrentResourceConfiguration();
 
-        $entityProperty = $childResourceConfig->getParentEntityProperty();
-
         $parentResource = $this->resourceFactory->resourceFor($childResourceConfig->getParent());
 
-        $input[$entityProperty] = $parentResource->single($parentId);
+        $parent = $parentResource->single($parentId);
 
-        return $this->create($input);
+        return $this->repository->createWithParent($input, $parent);
     }
 
     /**

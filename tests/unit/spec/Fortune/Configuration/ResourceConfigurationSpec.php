@@ -21,15 +21,4 @@ class ResourceConfigurationSpec extends ObjectBehavior
     {
         $this->shouldHaveType('Fortune\Configuration\ResourceConfiguration');
     }
-
-    function it_can_get_parent_entity_property()
-    {
-        $this->setEntityClass('spec\Fortune\Configuration\PuppyFixture');
-
-        $this->setParent('dog');
-        $this->getParentEntityProperty()->shouldReturn('dog');
-
-        $this->setParent('dogs');
-        $this->getParentEntityProperty()->shouldReturn('dog');
-    }
 }

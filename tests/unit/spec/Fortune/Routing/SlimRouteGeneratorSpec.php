@@ -67,13 +67,12 @@ class SlimRouteGeneratorSpec extends ObjectBehavior
 
         $config1->getResource()->shouldBeCalled()->willReturn('bars');
         $config1->getParent()->shouldBeCalled()->willReturn('foos');
-        $config1->getParentEntityProperty()->willReturn('foo');
 
-        $slim->get('/foos/:foo/bars', $this->mockOutput($output, 'index', [1]))->shouldBeCalledTimes(1);
-        $slim->get('/foos/:foo/bars/:id', $this->mockOutput($output, 'show', [1, 1]))->shouldBeCalledTimes(1);
-        $slim->post('/foos/:foo/bars', $this->mockOutput($output, 'create', [1]))->shouldBeCalledTimes(1);
-        $slim->put('/foos/:foo/bars/:id', $this->mockOutput($output, 'update', [1, 1]))->shouldBeCalledTimes(1);
-        $slim->delete('/foos/:foo/bars/:id', $this->mockOutput($output, 'delete', [1, 1]))->shouldBeCalledTimes(1);
+        $slim->get('/foos/:foos_id/bars', $this->mockOutput($output, 'index', [1]))->shouldBeCalledTimes(1);
+        $slim->get('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'show', [1, 1]))->shouldBeCalledTimes(1);
+        $slim->post('/foos/:foos_id/bars', $this->mockOutput($output, 'create', [1]))->shouldBeCalledTimes(1);
+        $slim->put('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'update', [1, 1]))->shouldBeCalledTimes(1);
+        $slim->delete('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'delete', [1, 1]))->shouldBeCalledTimes(1);
 
         $this->generateRoutes();
     }

@@ -24,6 +24,7 @@ use Fortune\Repository\DoctrineResourceRepository;
 use Slim\Http\Request;
 use Slim\Slim;
 use Fortune\Routing\SlimRouteGenerator;
+use Fortune\Repository\PdoResourceRepository;
 
 /**
  * Factory for creating this packages objects.
@@ -133,9 +134,9 @@ class ResourceFactory
      * @param string $entityClass
      * @return DoctrineResourceRepository
      */
-    protected function newDoctrineRepository(EntityManager $manager, $entityClass)
+    protected function newDoctrineRepository(EntityManager $manager, $entityClass, $parent)
     {
-        return new DoctrineResourceRepository($manager, $entityClass);
+        return new DoctrineResourceRepository($manager, $entityClass, $parent);
     }
 
     /**
@@ -145,9 +146,9 @@ class ResourceFactory
      * @param mixed $entityClass
      * @return PdoResourceRepository
      */
-    protected function newPdoRepository(PDO $pdo, $entityClass)
+    protected function newPdoRepository(PDO $pdo, $entityClass, $parentCol)
     {
-        return new PdoResourceRepository($pdo, $entityClass);
+        return new PdoResourceRepository($pdo, $entityClass, $parentCol);
     }
 
     /**
@@ -157,12 +158,12 @@ class ResourceFactory
      * @param string $entityClass
      * @return ResourceRepositoryInterface
      */
-    protected function newRepository($entityClass)
+    protected function newRepository(ResourceConfiguration $config)
     {
         if ($this->database instanceof EntityManager) {
-            return $this->newDoctrineRepository($this->database, $entityClass);
+            return $this->newDoctrineRepository($this->database, $config->getEntityClass(), $config->getParent());
         } elseif ($this->database instanceof PDO) {
-            return $this->newPdoRepository($this->database, $entityClass);
+            return $this->newPdoRepository($this->database, $config->getResource(), $config->getParent());
         }
 
         throw new \Exception("Couldn't determine database connection type.");
@@ -193,7 +194,7 @@ class ResourceFactory
         $validatorClass = $config->getValidatorClass();
 
         return new Resource(
-            $this->newRepository($config->getEntityClass()),
+            $this->newRepository($config),
             new $validatorClass,
             $this->newSecurity(),
             $this

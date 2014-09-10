@@ -5,6 +5,7 @@ namespace Fortune\Test;
 use Slim\Slim;
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use PDO;
 
 class Container
 {
@@ -33,6 +34,10 @@ class Container
 
             // obtaining the entity manager
             return EntityManager::create($conn, $config);
+        });
+
+        $slim->container->singleton('pdo', function () {
+            return new PDO("sqlite:" . __DIR__ . "/../db.sqlite");
         });
 
         $slim->dbRecreator = function ($slim) {

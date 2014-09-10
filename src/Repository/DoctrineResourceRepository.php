@@ -3,7 +3,6 @@
 namespace Fortune\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Fortune\Repository\ResourceRepositoryInterface;
 
 /**
  * Doctrine implementaion for repository to find objects in database.
@@ -27,16 +26,24 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     protected $resourceClass;
 
     /**
+     * If the resource has a related parent, this is the parents resource name.
+     *
+     * @var string|null
+     */
+    protected $parent;
+
+    /**
      * Constructor
      *
      * @param EntityManager $manager
      * @param mixed $resourceClass
      * @return void
      */
-    public function __construct(EntityManager $manager, $resourceClass)
+    public function __construct(EntityManager $manager, $resourceClass, $parent = null)
     {
         $this->manager = $manager;
         $this->resourceClass = $resourceClass;
+        $this->parent = $parent;
     }
 
     /**
@@ -58,16 +65,20 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     /**
      * @Override
      */
-    public function findBy(array $findBy)
+    public function findByParent($parent_id)
     {
+        $findBy = array($this->getParentRelation() => $parent_id);
+
         return $this->manager->getRepository($this->resourceClass)->findBy($findBy);
     }
 
     /**
      * @Override
      */
-    public function findOneBy(array $findBy)
+    public function findOneByParent($id, $parent_id)
     {
+        $findBy = array('id' => $id, $this->getParentRelation() => $parent_id);
+
         return $this->manager->getRepository($this->resourceClass)->findOneBy($findBy);
     }
 
@@ -83,6 +94,16 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         $this->manager->flush();
 
         return $resource;
+    }
+
+    /**
+     * @Override
+     */
+    public function createWithParent(array $input, $parent)
+    {
+        $input[$this->getParentRelation()] = $parent;
+
+        return $this->create($input);
     }
 
     /**
@@ -111,14 +132,6 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     }
 
     /**
-     * @Override
-     */
-    public function getClassName()
-    {
-        return $this->resourceClass;
-    }
-
-    /**
      * Sets all the properties on the entity.
      *
      * @param mixed $resource
@@ -134,5 +147,22 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
                 $resource->$setter($value);
             }
         }
+    }
+
+    /**
+     * @Override
+     *
+     * Reads the entity class for its parents relation attr name.
+     */
+    public function getParentRelation()
+    {
+        // the parent resource may be pluralized
+        // but the property name is most likely singular
+        // if property name actually plural just use that
+        // otherwise make it singular
+        $reflection = new \ReflectionClass($this->resourceClass);
+
+        return $reflection->hasProperty($this->parent)
+            ? $this->parent : preg_replace('/s$/', '', $this->parent);
     }
 }

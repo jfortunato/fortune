@@ -18,7 +18,7 @@ $app = new Slim;
 
 $configuration = Yaml::parse(file_get_contents(__DIR__ . '/../../behat-contexts/fixtures/config.yaml'));
 
-$factory = new ResourceFactory($container->doctrine, $configuration);
+$factory = new ResourceFactory($container->pdo, $configuration);
 $factory->generateSlimRoutes($app);
 
 $app->get('/', function () {

@@ -70,7 +70,7 @@ class SlimRouteGenerator extends BaseRouteGenerator
     protected function baseRoute(ResourceConfiguration $config)
     {
         $parent = $config->getParent() ?
-            "/{$config->getParent()}/:{$config->getParentEntityProperty()}" : "";
+            "/{$config->getParent()}/:{$config->getParent()}_id" : "";
 
         return "{$parent}/{$config->getResource()}";
     }

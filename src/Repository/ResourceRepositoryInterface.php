@@ -20,20 +20,20 @@ interface ResourceRepositoryInterface
     public function find($id);
 
     /**
-     * Retrieves all entities based on criteria.
+     * Retrieves all entities based on their parent id.
      *
      * @param array $findBy
      * @return array
      */
-    public function findBy(array $findBy);
+    public function findByParent($parent_id);
 
     /**
-     * Retrieve an entity based on criteria.
+     * Retrieve an entity based on its parent id.
      *
      * @param array $findBy
      * @return object
      */
-    public function findOneBy(array $findBy);
+    public function findOneByParent($id, $parent_id);
 
     /**
      * Creates a new entity..
@@ -42,6 +42,15 @@ interface ResourceRepositoryInterface
      * @return object The newly created object.
      */
     public function create(array $input);
+
+    /**
+     * The implementing class decides how relations are handled / added to $input
+     *
+     * @param array $input
+     * @param mixed $parent
+     * @return string
+     */
+    public function createWithParent(array $input, $parent);
 
     /**
      * Updates an existing entity.
@@ -61,9 +70,9 @@ interface ResourceRepositoryInterface
     public function delete($id);
 
     /**
-     * Get the entity class.
+     * Get the parent column name or entity field.
      *
      * @return string
      */
-    public function getClassName();
+    public function getParentRelation();
 }

@@ -103,23 +103,6 @@ class ResourceConfiguration
     }
 
     /**
-     * Reads the entity class for its parents relation attr name.
-     *
-     * @return string
-     */
-    public function getParentEntityProperty()
-    {
-        // the parent resource may be pluralized
-        // but the property name is most likely singular
-        // if property name actually plural just use that
-        // otherwise make it singular
-        $reflection = new \ReflectionClass($this->getEntityClass());
-
-        return $reflection->hasProperty($this->getParent())
-            ? $this->getParent() : preg_replace('/s$/', '', $this->getParent());
-    }
-
-    /**
      * Checks config to determine if auth is required for access to resource.
      *
      * @return boolean
