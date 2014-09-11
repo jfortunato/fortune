@@ -1,7 +1,7 @@
 default:
     suites:
         resource:
-            contexts: [ ResourceContext ]
+            contexts: [ ResourceContext, ApiContext ]
     gherkin:
         filters:
             tags: ~@wip
