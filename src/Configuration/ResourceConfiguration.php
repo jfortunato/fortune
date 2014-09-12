@@ -30,10 +30,10 @@ class ResourceConfiguration
      * @param array $config
      * @return void
      */
-    public function __construct($resourceName, array $config)
+    public function __construct($resourceName, array $config = null)
     {
         $this->resourceName = $resourceName;
-        $this->config = $config;
+        $this->initializeConfig($config);
     }
 
     /**
@@ -109,8 +109,7 @@ class ResourceConfiguration
      */
     public function requiresAuthentication()
     {
-        return isset($this->config['access_control']['authentication']) ?
-            $this->config['access_control']['authentication'] : false;
+        return $this->config['access_control']['authentication'];
     }
 
     /**
@@ -120,8 +119,7 @@ class ResourceConfiguration
      */
     public function requiresRole()
     {
-        return isset($this->config['access_control']['role']) ?
-            $this->config['access_control']['role'] : null;
+        return $this->config['access_control']['role'];
     }
 
     /**
@@ -131,8 +129,7 @@ class ResourceConfiguration
      */
     public function requiresOwner()
     {
-        return isset($this->config['access_control']['owner']) ?
-            $this->config['access_control']['owner'] : false;
+        return $this->config['access_control']['owner'];
     }
 
     public function isUsingYamlValidation()
@@ -143,5 +140,26 @@ class ResourceConfiguration
     public function getYamlValidation()
     {
         return $this->config['validation'];
+    }
+
+    protected function defaultConfigurations()
+    {
+        return array(
+            'parent'         => null,
+            'entity'         => null,
+            'validation'     => array(),
+            'access_control' => array(
+                'authentication' => false,
+                'role'           => null,
+                'owner'          => false,
+            ),
+        );
+    }
+
+    protected function initializeConfig(array $config = null)
+    {
+        $default = $this->defaultConfigurations();
+
+        $this->config = $config ? array_replace_recursive($default, $config) : $default;
     }
 }
