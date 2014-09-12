@@ -20,7 +20,7 @@ Feature: Resource Parents
             dogs:
                 parent: ~
                 entity: Fortune\Test\Entity\Dog
-                validator: Fortune\Test\Validator\DogValidator
+                validation: Fortune\Test\Validator\DogValidator
                 access_control:
                     authentication: false
                     role: ~
@@ -28,7 +28,7 @@ Feature: Resource Parents
             puppies:
                 parent: dogs
                 entity: Fortune\Test\Entity\Puppy
-                validator: Fortune\Test\Validator\PuppyValidator
+                validation: Fortune\Test\Validator\PuppyValidator
             """
 
     Scenario: Getting a list of all puppies

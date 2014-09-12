@@ -13,7 +13,7 @@ Feature: Response Codes
             """
             dogs:
                 entity: Fortune\Test\Entity\Dog
-                validator: Fortune\Test\Validator\DogValidator
+                validation: Fortune\Test\Validator\DogValidator
                 parent: ~
                 access_control:
                     authentication: false

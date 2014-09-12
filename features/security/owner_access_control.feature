@@ -13,7 +13,7 @@ Feature: Owner resource security
             dogs:
                 parent: ~
                 entity: Fortune\Test\Entity\Dog
-                validator: Fortune\Test\Validator\DogValidator
+                validation: Fortune\Test\Validator\DogValidator
                 access_control:
                     owner: true
             """

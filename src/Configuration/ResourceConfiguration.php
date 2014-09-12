@@ -76,7 +76,7 @@ class ResourceConfiguration
      */
     public function getValidatorClass()
     {
-        return $this->config['validator'];
+        return $this->config['validation'];
     }
 
     /**
@@ -133,5 +133,15 @@ class ResourceConfiguration
     {
         return isset($this->config['access_control']['owner']) ?
             $this->config['access_control']['owner'] : false;
+    }
+
+    public function isUsingYamlValidation()
+    {
+        return is_array($this->config['validation']) ? true : false;
+    }
+
+    public function getYamlValidation()
+    {
+        return $this->config['validation'];
     }
 }

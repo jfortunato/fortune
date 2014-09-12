@@ -25,6 +25,7 @@ use Slim\Http\Request;
 use Slim\Slim;
 use Fortune\Routing\SlimRouteGenerator;
 use Fortune\Repository\PdoResourceRepository;
+use Fortune\Validator\YamlResourceValidator;
 
 /**
  * Factory for creating this packages objects.
@@ -191,14 +192,20 @@ class ResourceFactory
      */
     protected function newResource(ResourceConfiguration $config)
     {
-        $validatorClass = $config->getValidatorClass();
-
         return new Resource(
             $this->newRepository($config),
-            new $validatorClass,
+            $this->newValidator($config),
             $this->newSecurity(),
             $this
         );
+    }
+
+    protected function newValidator(ResourceConfiguration $config)
+    {
+        $class = $config->getValidatorClass();
+
+        return $config->isUsingYamlValidation() ?
+            new YamlResourceValidator($config->getYamlValidation()) : new $class();
     }
 
     /**
