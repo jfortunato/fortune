@@ -68,4 +68,11 @@ class ResourceConfigurationSpec extends ObjectBehavior
         $this->requiresRole()->shouldReturn(null);
         $this->requiresOwner()->shouldReturn(true);
     }
+
+    function it_should_get_excluded_properties()
+    {
+        $this->beConstructedWith('foo', ['exclude' => ['bar', 'baz']]);
+
+        $this->getExcludedProperties()->shouldReturn(['bar', 'baz']);
+    }
 }

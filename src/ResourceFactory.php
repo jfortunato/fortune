@@ -68,9 +68,11 @@ class ResourceFactory
      */
     public function newSimpleOutput()
     {
+        $config = $this->config->getCurrentResourceConfiguration();
+
         return new SimpleOutput(
-            $this->newSerializer(),
-            $this->newResource($this->config->getCurrentResourceConfiguration())
+            $this->newSerializer($config),
+            $this->newResource($config)
         );
     }
 
@@ -83,11 +85,13 @@ class ResourceFactory
      */
     public function newSlimOutput(Request $request, Response $response)
     {
+        $config = $this->config->getCurrentResourceConfiguration();
+
         return new SlimOutput(
             $request,
             $response,
-            $this->newSerializer(),
-            $this->newResource($this->config->getCurrentResourceConfiguration())
+            $this->newSerializer($config),
+            $this->newResource($config)
         );
     }
 
@@ -175,12 +179,12 @@ class ResourceFactory
      *
      * @return JMSSerializer
      */
-    protected function newSerializer()
+    protected function newSerializer(ResourceConfiguration $config)
     {
         return new JMSSerializer(
             SerializerBuilder::create()->build(),
             new SerializationContext,
-            new JMSPropertyExcluder
+            new JMSPropertyExcluder($config->getExcludedProperties())
         );
     }
 

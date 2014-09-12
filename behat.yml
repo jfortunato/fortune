@@ -4,6 +4,6 @@ default:
             contexts: [ ResourceContext, ApiContext ]
     gherkin:
         filters:
-            tags: ~@wip
+            tags: ~@wip&&~@skip
     formatters:
         progress: ~

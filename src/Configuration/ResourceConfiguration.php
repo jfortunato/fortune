@@ -102,6 +102,11 @@ class ResourceConfiguration
         return $this;
     }
 
+    public function getExcludedProperties()
+    {
+        return $this->config['exclude'];
+    }
+
     /**
      * Checks config to determine if auth is required for access to resource.
      *
@@ -153,6 +158,7 @@ class ResourceConfiguration
                 'role'           => null,
                 'owner'          => false,
             ),
+            'exclude'        => array(),
         );
     }
 

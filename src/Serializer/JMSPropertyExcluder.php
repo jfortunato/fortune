@@ -9,11 +9,12 @@ use JMS\Serializer\Metadata\PropertyMetadata;
 
 class JMSPropertyExcluder implements ExclusionStrategyInterface
 {
-    protected $skip = array(
-        'requiresAuthentication',
-        'requiresRole',
-        'requiresOwner',
-    );
+    protected $excludedProperties;
+
+    public function __construct(array $excludedProperties = array())
+    {
+        $this->excludedProperties = $excludedProperties;
+    }
 
     public function shouldSkipClass(ClassMetadata $metadata, Context $context)
     {
@@ -21,6 +22,6 @@ class JMSPropertyExcluder implements ExclusionStrategyInterface
 
     public function shouldSkipProperty(PropertyMetadata $property, Context $context)
     {
-        return in_array($property->name, $this->skip);
+        return in_array($property->name, $this->excludedProperties);
     }
 }
