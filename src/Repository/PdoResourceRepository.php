@@ -3,6 +3,7 @@
 namespace Fortune\Repository;
 
 use \PDO;
+use Doctrine\Common\Inflector\Inflector;
 
 class PdoResourceRepository implements ResourceRepositoryInterface
 {
@@ -138,6 +139,6 @@ class PdoResourceRepository implements ResourceRepositoryInterface
      */
     public function getParentRelation()
     {
-        return preg_replace('/s$/', '', $this->parent) . '_id';
+        return Inflector::singularize($this->parent) . '_id';
     }
 }

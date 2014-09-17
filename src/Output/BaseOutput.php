@@ -138,19 +138,44 @@ abstract class BaseOutput
         return !$this->resource->passesValidation($input);
     }
 
+    protected function failsParentMatch(array $parents)
+    {
+        // just verify that the url structure is correct
+        // and that we can find parents with the appropriate ids
+        // the $parents (ids) go from most senior parent to least senior parent
+        // but we need to check for the reverse of this
+        $resource = $this->resource->getParentResource();
+
+        foreach (array_reverse($parents) as $parentId) {
+            if (!$resource->single($parentId)) {
+                return true;
+            }
+
+            $resource = $resource->getParentResource();
+        }
+
+        return false;
+    }
+
     /**
      * Shows all of a resource.
      *
      * @param int $parentId Required when resource is a sub-resource.
      * @return string
      */
-    public function index($parentId = null)
+    public function index()
     {
+        $parents = func_get_args();
+
         if ($this->failsSecurity()) {
             return $this->responseDenied();
         }
 
-        $entities = $parentId ? $this->resource->allByParent($parentId):$this->resource->all();
+        if ($this->failsParentMatch($parents)) {
+            return $this->responseNotFound();
+        }
+
+        $entities = $parents ? $this->resource->allByParent(end($parents)):$this->resource->all();
 
         return $this->response($entities, 200);
     }
@@ -162,15 +187,19 @@ abstract class BaseOutput
      * @param int $parentId Required when resource is a sub-resource.
      * @return string
      */
-    public function show($id, $parentId = null)
+    public function show()
     {
-        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
+        $parents = func_get_args();
+
+        $id = array_pop($parents);
+
+        $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
         if ($this->failsSecurity()) {
             return $this->responseDenied();
         }
 
-        if (!$entity) {
+        if (!$entity || $this->failsParentMatch($parents)) {
             return $this->responseNotFound();
         }
 
@@ -183,10 +212,16 @@ abstract class BaseOutput
      * @param int $parentId Required when resource is a sub-resource.
      * @return string
      */
-    public function create($parentId = null)
+    public function create()
     {
+        $parents = func_get_args();
+
         if ($this->failsSecurity()) {
             return $this->responseDenied();
+        }
+
+        if ($this->failsParentMatch($parents)) {
+            return $this->responseNotFound();
         }
 
         $input = $this->getInput();
@@ -195,7 +230,7 @@ abstract class BaseOutput
             return $this->responseBadInput();
         }
 
-        $entity = $parentId ? $this->resource->createWithParent($parentId, $input) : $this->resource->create($input);
+        $entity = $parents ? $this->resource->createWithParent(end($parents), $input) : $this->resource->create($input);
 
         return $this->response($entity, 201);
     }
@@ -207,15 +242,19 @@ abstract class BaseOutput
      * @param int $parentId Required when resource is a sub-resource.
      * @return string
      */
-    public function update($id, $parentId = null)
+    public function update()
     {
-        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
+        $parents = func_get_args();
+
+        $id = array_pop($parents);
+
+        $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
         if ($this->failsSecurity($entity)) {
             return $this->responseDenied();
         }
 
-        if (!$entity) {
+        if (!$entity || $this->failsParentMatch($parents)) {
             return $this->responseNotFound();
         }
 
@@ -237,15 +276,19 @@ abstract class BaseOutput
      * @param int $parentId Required when resource is a sub-resource.
      * @return string
      */
-    public function delete($id, $parentId = null)
+    public function delete()
     {
-        $entity = $parentId ? $this->resource->singleByParent($parentId, $id) : $this->resource->single($id);
+        $parents = func_get_args();
+
+        $id = array_pop($parents);
+
+        $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
         if ($this->failsSecurity($entity)) {
             return $this->responseDenied();
         }
 
-        if (!$entity) {
+        if (!$entity || $this->failsParentMatch($parents)) {
             return $this->responseNotFound();
         }
 

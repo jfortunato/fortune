@@ -8,7 +8,8 @@
     ],
     "require": {
         "jms/serializer": "~0.16",
-        "vlucas/valitron": "~1.1.7"
+        "vlucas/valitron": "~1.1.7",
+        "doctrine/inflector": "~1.0"
     },
     "require-dev": {
         "behat/behat": "~3.0",

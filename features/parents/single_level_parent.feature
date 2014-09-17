@@ -1,4 +1,4 @@
-@parents
+@parents.single
 Feature: Resource Parents
     In order to request sub-resources
     As a user of this library

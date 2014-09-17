@@ -10,12 +10,13 @@ use Fortune\Security\SecurityInterface;
 use Fortune\Resource\Creator\ResourceCreator;
 use Fortune\Configuration\Configuration;
 use Fortune\ResourceFactory;
+use Fortune\Configuration\ResourceConfiguration;
 
 class ResourceSpec extends ObjectBehavior
 {
-    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security, ResourceFactory $resourceFactory)
+    function let(ResourceRepositoryInterface $repository, ResourceValidatorInterface $validator, SecurityInterface $security, ResourceFactory $resourceFactory, ResourceConfiguration $config)
     {
-        $this->beConstructedWith($repository, $validator, $security, $resourceFactory);
+        $this->beConstructedWith($repository, $validator, $security, $resourceFactory, $config);
     }
 
     function it_is_initializable()

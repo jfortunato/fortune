@@ -12,9 +12,9 @@ use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * @Entity(repositoryClass="Doctrine\ORM\EntityRepository")
- * @Table(name="puppies")
+ * @Table(name="toys")
  */
-class Puppy
+class Toy
 {
     /**
      * @Id @Column(type="integer")
@@ -25,13 +25,13 @@ class Puppy
     /**
      * @Column(type="string")
      */
-    private $name;
+    private $toy;
 
     /**
-     * @ManyToOne(targetEntity="Dog")
-     * @JoinColumn(name="dog_id", referencedColumnName="id")
+     * @ManyToOne(targetEntity="Puppy")
+     * @JoinColumn(name="puppy_id", referencedColumnName="id")
      */
-    private $dog;
+    private $puppy;
 
     /**
      * Gets the value of id
@@ -44,48 +44,48 @@ class Puppy
     }
 
     /**
-     * Gets the value of name
+     * Gets the value of toy
      *
-     * @return string
+     * @return Toy
      */
-    public function getName()
+    public function getToy()
     {
-        return $this->name;
+        return $this->toy;
     }
 
     /**
-     * Sets the value of name
+     * Sets the value of toy
      *
-     * @param string $name description
+     * @param Toy $toy description
      *
-     * @return Puppy
+     * @return Toy
      */
-    public function setName($name)
+    public function setToy($toy)
     {
-        $this->name = $name;
+        $this->toy = $toy;
         return $this;
     }
 
     /**
-     * Gets the value of dog
-     *
-     * @return Dog
-     */
-    public function getDog()
-    {
-        return $this->dog;
-    }
-
-    /**
-     * Sets the value of dog
-     *
-     * @param Dog $dog description
+     * Gets the value of puppy
      *
      * @return Puppy
      */
-    public function setDog(Dog $dog)
+    public function getPuppy()
     {
-        $this->dog = $dog;
+        return $this->puppy;
+    }
+
+    /**
+     * Sets the value of puppy
+     *
+     * @param Puppy $puppy description
+     *
+     * @return Toy
+     */
+    public function setPuppy(Puppy $puppy)
+    {
+        $this->puppy = $puppy;
         return $this;
     }
 }

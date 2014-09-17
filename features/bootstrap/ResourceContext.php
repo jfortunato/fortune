@@ -8,6 +8,7 @@ use Symfony\Component\Yaml\Dumper;
 use Fortune\Configuration\Configuration;
 use Fortune\Test\Entity\Dog;
 use Fortune\Test\Entity\Puppy;
+use Fortune\Test\Entity\Toy;
 
 class ResourceContext extends BaseContext
 {
@@ -50,6 +51,20 @@ class ResourceContext extends BaseContext
     }
 
     /**
+     * @Given The following toys exist:
+     */
+    public function theFollowingToysExist(TableNode $table)
+    {
+        foreach ($table->getHash() as $data) {
+            $toy = new Toy;
+            $toy->setToy($data['toy']);
+
+            $this->getManager()->persist($toy);
+            $this->getManager()->flush();
+        }
+    }
+
+    /**
      * @Given The puppy :puppyName belongs to dog :dogName
      */
     public function thePuppyBelongsToDog($puppyName, $dogName)
@@ -60,6 +75,20 @@ class ResourceContext extends BaseContext
         $puppy->setDog($dog);
 
         $this->getManager()->persist($puppy);
+        $this->getManager()->flush();
+    }
+
+    /**
+     * @Given The toy :toy belongs to puppy :puppy
+     */
+    public function theToyBelongsToPuppy($toy, $puppyName)
+    {
+        $toy = $this->getManager()->getRepository('Fortune\Test\Entity\Toy')->findOneBy(array('toy' => $toy));
+        $puppy = $this->getManager()->getRepository('Fortune\Test\Entity\Puppy')->findOneBy(array('name' => $puppyName));
+
+        $toy->setPuppy($puppy);
+
+        $this->getManager()->persist($toy);
         $this->getManager()->flush();
     }
 

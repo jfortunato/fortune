@@ -61,18 +61,40 @@ class SlimRouteGeneratorSpec extends ObjectBehavior
         $this->generateRoutes();
     }
 
-    function it_should_generate_route_with_parents($slim, $output, $configuration, ResourceConfiguration $config1)
+    function it_should_generate_route_with_parents($slim, $output, $configuration, ResourceConfiguration $config1, ResourceConfiguration $config2)
     {
         $configuration->getResourceConfigurations()->shouldBeCalled()->willReturn(array($config1));
 
         $config1->getResource()->shouldBeCalled()->willReturn('bars');
         $config1->getParent()->shouldBeCalled()->willReturn('foos');
+        $configuration->resourceConfigurationFor('foos')->willReturn($config2);
+        $config2->getParent()->willReturn(null);
 
         $slim->get('/foos/:foos_id/bars', $this->mockOutput($output, 'index', [1]))->shouldBeCalledTimes(1);
         $slim->get('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'show', [1, 1]))->shouldBeCalledTimes(1);
         $slim->post('/foos/:foos_id/bars', $this->mockOutput($output, 'create', [1]))->shouldBeCalledTimes(1);
         $slim->put('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'update', [1, 1]))->shouldBeCalledTimes(1);
         $slim->delete('/foos/:foos_id/bars/:id', $this->mockOutput($output, 'delete', [1, 1]))->shouldBeCalledTimes(1);
+
+        $this->generateRoutes();
+    }
+
+    function it_should_generate_route_with_multi_level_parents($slim, $output, $configuration, ResourceConfiguration $config1, ResourceConfiguration $config2, ResourceConfiguration $config3)
+    {
+        $configuration->getResourceConfigurations()->shouldBeCalled()->willReturn(array($config1));
+
+        $config1->getResource()->shouldBeCalled()->willReturn('boos');
+        $config1->getParent()->shouldBeCalled()->willReturn('bars');
+        $configuration->resourceConfigurationFor('bars')->willReturn($config2);
+        $config2->getParent()->willReturn('foos');
+        $configuration->resourceConfigurationFor('foos')->willReturn($config3);
+        $config3->getParent()->willReturn(null);
+
+        $slim->get('/foos/:foos_id/bars/:bars_id/boos', $this->mockOutput($output, 'index', [1, 1]))->shouldBeCalledTimes(1);
+        $slim->get('/foos/:foos_id/bars/:bars_id/boos/:id', $this->mockOutput($output, 'show', [1, 1, 1]))->shouldBeCalledTimes(1);
+        $slim->post('/foos/:foos_id/bars/:bars_id/boos', $this->mockOutput($output, 'create', [1, 1]))->shouldBeCalledTimes(1);
+        $slim->put('/foos/:foos_id/bars/:bars_id/boos/:id', $this->mockOutput($output, 'update', [1, 1, 1]))->shouldBeCalledTimes(1);
+        $slim->delete('/foos/:foos_id/bars/:bars_id/boos/:id', $this->mockOutput($output, 'delete', [1, 1, 1]))->shouldBeCalledTimes(1);
 
         $this->generateRoutes();
     }

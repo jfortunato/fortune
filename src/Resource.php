@@ -5,6 +5,7 @@ namespace Fortune;
 use Fortune\Repository\ResourceRepositoryInterface;
 use Fortune\Validator\ResourceValidatorInterface;
 use Fortune\Security\SecurityInterface;
+use Fortune\Configuration\ResourceConfiguration;
 
 /**
  * A Resource is basically a repository with security and validation.
@@ -41,6 +42,8 @@ class Resource implements ResourceInterface
      */
     protected $resourceFactory;
 
+    protected $config;
+
     /**
      * Constructor
      *
@@ -54,12 +57,14 @@ class Resource implements ResourceInterface
         ResourceRepositoryInterface $repository,
         ResourceValidatorInterface $validator,
         SecurityInterface $security,
-        ResourceFactory $resourceFactory
+        ResourceFactory $resourceFactory,
+        ResourceConfiguration $config
     ) {
         $this->repository = $repository;
         $this->validator = $validator;
         $this->security = $security;
         $this->resourceFactory = $resourceFactory;
+        $this->config = $config;
     }
 
     /**
@@ -147,5 +152,11 @@ class Resource implements ResourceInterface
     public function passesValidation(array $input)
     {
         return $this->validator->validate($input);
+    }
+
+    public function getParentResource()
+    {
+        return $this->config->getParent() ?
+            $this->resourceFactory->resourceFor($this->config->getParent()) : null;
     }
 }

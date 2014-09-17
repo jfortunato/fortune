@@ -200,7 +200,8 @@ class ResourceFactory
             $this->newRepository($config),
             $this->newValidator($config),
             $this->newSecurity(),
-            $this
+            $this,
+            $config
         );
     }
 

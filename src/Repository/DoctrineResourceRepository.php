@@ -3,6 +3,7 @@
 namespace Fortune\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Inflector\Inflector;
 
 /**
  * Doctrine implementaion for repository to find objects in database.
@@ -163,6 +164,6 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         $reflection = new \ReflectionClass($this->resourceClass);
 
         return $reflection->hasProperty($this->parent)
-            ? $this->parent : preg_replace('/s$/', '', $this->parent);
+            ? $this->parent : Inflector::singularize($this->parent);
     }
 }
