@@ -7,9 +7,9 @@ use Valitron\Validator;
 
 class DogValidator extends ValitronResourceValidator
 {
-    protected $rules = [
+    protected $rules = array(
         'required' => 'name',
-    ];
+    );
 
     public function addRules(Validator $v)
     {
