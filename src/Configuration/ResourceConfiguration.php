@@ -127,16 +127,6 @@ class ResourceConfiguration
         return $this->config['access_control']['role'];
     }
 
-    /**
-     * Checks config to determine if owner is required for access to resource.
-     *
-     * @return boolean
-     */
-    public function requiresOwner()
-    {
-        return $this->config['access_control']['owner'];
-    }
-
     public function isUsingYamlValidation()
     {
         return is_array($this->config['validation']) ? true : false;
@@ -156,7 +146,6 @@ class ResourceConfiguration
             'access_control' => array(
                 'authentication' => false,
                 'role'           => null,
-                'owner'          => false,
             ),
             'exclude'        => array(),
         );

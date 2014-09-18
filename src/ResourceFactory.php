@@ -19,7 +19,6 @@ use Fortune\Serializer\JMSSerializer;
 use Fortune\Serializer\JMSPropertyExcluder;
 use Fortune\Security\Bouncer\SimpleAuthenticationBouncer;
 use Fortune\Security\Bouncer\SimpleRoleBouncer;
-use Fortune\Security\Bouncer\SimpleOwnerBouncer;
 use Fortune\Repository\DoctrineResourceRepository;
 use Slim\Http\Request;
 use Slim\Slim;
@@ -225,7 +224,6 @@ class ResourceFactory
         return new Security(
             new SimpleAuthenticationBouncer($config),
             new SimpleRoleBouncer($config),
-            new SimpleOwnerBouncer($config),
             new ParentBouncer($config)
         );
     }

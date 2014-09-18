@@ -8,7 +8,6 @@ return array(
         'access_control'     => array(
             'authentication'    => $requiresAuthentication,
             'role'              => $requiresRole,
-            'owner'             => $requiresOwner,
         ),
     ),
     'puppies'   => array(

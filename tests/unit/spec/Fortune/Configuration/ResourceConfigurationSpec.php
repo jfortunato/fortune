@@ -45,7 +45,6 @@ class ResourceConfigurationSpec extends ObjectBehavior
         $this->getYamlValidation()->shouldReturn(array());
         $this->requiresAuthentication()->shouldReturn(false);
         $this->requiresRole()->shouldReturn(null);
-        $this->requiresOwner()->shouldReturn(false);
     }
 
     function it_should_set_default_configurations_when_some_are_given()
@@ -57,16 +56,14 @@ class ResourceConfigurationSpec extends ObjectBehavior
         $this->getYamlValidation()->shouldReturn(array());
         $this->requiresAuthentication()->shouldReturn(false);
         $this->requiresRole()->shouldReturn(null);
-        $this->requiresOwner()->shouldReturn(false);
     }
 
     function it_should_set_all_default_access_controls_when_one_is_given()
     {
-        $this->beConstructedWith('foo', ['access_control' => ['owner' => true]]);
+        $this->beConstructedWith('foo', ['access_control' => ['authentication' => true]]);
 
-        $this->requiresAuthentication()->shouldReturn(false);
+        $this->requiresAuthentication()->shouldReturn(true);
         $this->requiresRole()->shouldReturn(null);
-        $this->requiresOwner()->shouldReturn(true);
     }
 
     function it_should_get_excluded_properties()

@@ -145,16 +145,6 @@ class ApiContext extends BaseContext
     }
 
     /**
-     * @Given /^I am the owner of the resource$/
-     */
-    public function iAmTheOwnerOfTheResource()
-    {
-        // the SimpleOwnerBouncer just checks if $_SESSION['username'] isset
-        // to determine the owner, so just make sure we have set login
-        assertTrue($this->query['doLogin']);
-    }
-
-    /**
      * @Given /^I am not logged in$/
      */
     public function iAmNotLoggedIn()

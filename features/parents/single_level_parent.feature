@@ -24,7 +24,6 @@ Feature: Resource Parents
                 access_control:
                     authentication: false
                     role: ~
-                    owner: false
             puppies:
                 parent: dogs
                 entity: Fortune\Test\Entity\Puppy

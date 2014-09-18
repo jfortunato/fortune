@@ -18,7 +18,6 @@ Feature: Resource CRUD Actions
                 access_control:
                     authentication: false
                     role: ~
-                    owner: false
             """
 
     Scenario: Getting a list of all dogs

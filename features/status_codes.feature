@@ -18,7 +18,6 @@ Feature: Response Codes
                 access_control:
                     authentication: false
                     role: ~
-                    owner: false
             """
 
     Scenario Outline: 200 OK - when requesting to view resource
@@ -87,20 +86,6 @@ Feature: Response Codes
         Given I am logged in
         But I dont have a role
         And The resource "dogs" requires role "admin"
-        When I send a <method> request to "<url>"
-        Then The response code should be 403
-        And The error message should contain "Access Denied"
-    Examples:
-            | method | url     |
-            | GET    | /dogs   |
-            | GET    | /dogs/1 |
-            | POST   | /dogs   |
-            | PUT    | /dogs/1 |
-            | DELETE | /dogs/1 |
-
-    Scenario Outline: 403 FORBIDDEN - when owner is required
-        Given I am not logged in
-        And The resource "dogs" requires owner for access
         When I send a <method> request to "<url>"
         Then The response code should be 403
         And The error message should contain "Access Denied"
