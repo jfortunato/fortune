@@ -1,3 +1,4 @@
 /vendor/
+composer.lock
 db.sqlite
 /features/bootstrap/fixtures/config.yaml
