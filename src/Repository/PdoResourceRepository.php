@@ -5,14 +5,42 @@ namespace Fortune\Repository;
 use \PDO;
 use Doctrine\Common\Inflector\Inflector;
 
+/**
+ * PDO implementaion for repository to find resources in database.
+ *
+ * @package Fortune
+ */
 class PdoResourceRepository implements ResourceRepositoryInterface
 {
+    /**
+     * The handle to the PDO object.
+     *
+     * @var PDO
+     */
     protected $pdo;
 
+    /**
+     * The name of the table to locate this resource.
+     *
+     * @var string
+     */
     protected $tableName;
 
+    /**
+     * The name of this resources parent resource if applicable.
+     *
+     * @var string
+     */
     protected $parent;
 
+    /**
+     * Constructor
+     *
+     * @param PDO $pdo
+     * @param string $tableName
+     * @param string $parent
+     * @return void
+     */
     public function __construct(PDO $pdo, $tableName, $parent = null)
     {
         $this->pdo = $pdo;

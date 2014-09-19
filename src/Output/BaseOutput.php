@@ -138,6 +138,13 @@ abstract class BaseOutput
         return !$this->resource->passesValidation($input);
     }
 
+    /**
+     * For a url with multi-level resources (/dogs/1/puppies/1), this verifies that
+     * the parent identifiers (/dogs/1) actually own the requested resource (/puppies/1)
+     *
+     * @param array $parents
+     * @return boolean
+     */
     protected function failsParentMatch(array $parents)
     {
         // just verify that the url structure is correct
@@ -160,10 +167,11 @@ abstract class BaseOutput
     /**
      * Shows all of a resource.
      *
-     * @param int $parentId Required when resource is a sub-resource.
+     * @param mixed $identifiers,... all the resource identifiers starting with
+     * the parents if applicable down to the requested resource
      * @return string
      */
-    public function index()
+    public function index($identifiers = null)
     {
         $parents = func_get_args();
 
@@ -183,11 +191,11 @@ abstract class BaseOutput
     /**
      * Shows a single resource.
      *
-     * @param int $id The id of the resource to find.
-     * @param int $parentId Required when resource is a sub-resource.
+     * @param mixed $identifiers,... all the resource identifiers starting with
+     * the parents if applicable down to the requested resource
      * @return string
      */
-    public function show()
+    public function show($identifiers)
     {
         $parents = func_get_args();
 
@@ -209,10 +217,11 @@ abstract class BaseOutput
     /**
      * Creates a new resource.
      *
-     * @param int $parentId Required when resource is a sub-resource.
+     * @param mixed $identifiers,... all the resource identifiers starting with
+     * the parents if applicable down to the requested resource
      * @return string
      */
-    public function create()
+    public function create($identifiers = null)
     {
         $parents = func_get_args();
 
@@ -238,11 +247,11 @@ abstract class BaseOutput
     /**
      * Updates and existing resource.
      *
-     * @param int $id The id of the resource to update.
-     * @param int $parentId Required when resource is a sub-resource.
+     * @param mixed $identifiers,... all the resource identifiers starting with
+     * the parents if applicable down to the requested resource
      * @return string
      */
-    public function update()
+    public function update($identifiers)
     {
         $parents = func_get_args();
 
@@ -272,11 +281,11 @@ abstract class BaseOutput
     /**
      * Deletes an existing resource.
      *
-     * @param int $id The id of the resource to delete.
-     * @param int $parentId Required when resource is a sub-resource.
+     * @param mixed $identifiers,... all the resource identifiers starting with
+     * the parents if applicable down to the requested resource
      * @return string
      */
-    public function delete()
+    public function delete($identifiers)
     {
         $parents = func_get_args();
 

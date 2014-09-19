@@ -94,6 +94,12 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Helper for generating all the routes for the configured resources in slim.
+     *
+     * @param Slim $slim
+     * @return void
+     */
     public function generateSlimRoutes(Slim $slim)
     {
         // if we are not on a resources's route, then dont generate any routes
@@ -204,6 +210,12 @@ class ResourceFactory
         );
     }
 
+    /**
+     * Checks the configuration to decide what validation class to use.
+     *
+     * @param ResourceConfiguration $config
+     * @return YamlResourceValidator|object
+     */
     protected function newValidator(ResourceConfiguration $config)
     {
         $class = $config->getValidatorClass();

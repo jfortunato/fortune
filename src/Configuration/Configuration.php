@@ -112,6 +112,11 @@ class Configuration
         return null;
     }
 
+    /**
+     * Gets all available ResourceConfiguration objects.
+     *
+     * @return array
+     */
     public function getResourceConfigurations()
     {
         return $this->resourceConfigurations;

@@ -7,12 +7,35 @@ use Slim\Slim;
 use Fortune\Output\SlimOutput;
 use Fortune\Configuration\ResourceConfiguration;
 
+/**
+ * Slim implementation for generating all resource routes.
+ *
+ * @package Fortune
+ */
 class SlimRouteGenerator extends BaseRouteGenerator
 {
+    /**
+     * The Slim app.
+     *
+     * @var Slim
+     */
     protected $slim;
 
+    /**
+     * Slim implementation for calling the routes.
+     *
+     * @var SlimOutput
+     */
     protected $output;
 
+    /**
+     * Constructor
+     *
+     * @param Slim $slim
+     * @param SlimOutput $output
+     * @param Configuration $configuration
+     * @return void
+     */
     public function __construct(Slim $slim, SlimOutput $output, Configuration $configuration)
     {
         $this->slim = $slim;
@@ -21,6 +44,9 @@ class SlimRouteGenerator extends BaseRouteGenerator
         parent::__construct($configuration);
     }
 
+    /**
+     * @Override
+     */
     public function generateRoutes()
     {
         foreach ($this->configuration->getResourceConfigurations() as $resourceConfig) {
@@ -32,6 +58,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         }
     }
 
+    /**
+     * Generates the index route.
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     protected function generateGetAll(ResourceConfiguration $config)
     {
         $that = $this;
@@ -41,6 +73,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         });
     }
 
+    /**
+     * Generates the show route.
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     protected function generateGetSingle(ResourceConfiguration $config)
     {
         $that = $this;
@@ -50,6 +88,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         });
     }
 
+    /**
+     * Generates the create route.
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     protected function generatePost(ResourceConfiguration $config)
     {
         $that = $this;
@@ -59,6 +103,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         });
     }
 
+    /**
+     * Generates the update route.
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     protected function generatePut(ResourceConfiguration $config)
     {
         $that = $this;
@@ -68,6 +118,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         });
     }
 
+    /**
+     * Generates the delete route.
+     *
+     * @param ResourceConfiguration $config
+     * @return void
+     */
     protected function generateDelete(ResourceConfiguration $config)
     {
         $that = $this;
@@ -77,6 +133,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         });
     }
 
+    /**
+     * Gets the base route for a resource including parents, excluding identifier.
+     *
+     * @param ResourceConfiguration $config
+     * @return string
+     */
     protected function baseRoute(ResourceConfiguration $config)
     {
         $parent = $this->parentRoutesFor($config);
@@ -84,6 +146,12 @@ class SlimRouteGenerator extends BaseRouteGenerator
         return "{$parent}/{$config->getResource()}";
     }
 
+    /**
+     * Gets the parents routes for a given child resource.
+     *
+     * @param ResourceConfiguration $config
+     * @return string
+     */
     protected function parentRoutesFor(ResourceConfiguration $config)
     {
         if ($config->getParent()) {
@@ -93,6 +161,13 @@ class SlimRouteGenerator extends BaseRouteGenerator
         }
     }
 
+    /**
+     * Calls the $method on the SlimOutput object
+     *
+     * @param string $method
+     * @param array $routeParams
+     * @return void
+     */
     public function executeRoute($method, array $routeParams)
     {
         echo call_user_func_array(array($this->output, $method), $routeParams);

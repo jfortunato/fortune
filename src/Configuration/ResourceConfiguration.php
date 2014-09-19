@@ -102,6 +102,11 @@ class ResourceConfiguration
         return $this;
     }
 
+    /**
+     * Gets configured excluded properties.
+     *
+     * @return array
+     */
     public function getExcludedProperties()
     {
         return $this->config['exclude'];
@@ -127,16 +132,32 @@ class ResourceConfiguration
         return $this->config['access_control']['role'];
     }
 
+    /**
+     * Determines if yaml or object validation is being used.
+     *
+     * @return boolean
+     */
     public function isUsingYamlValidation()
     {
         return is_array($this->config['validation']) ? true : false;
     }
 
+    /**
+     * Gets the configured validation.
+     *
+     * @return array
+     */
     public function getYamlValidation()
     {
         return $this->config['validation'];
     }
 
+    /**
+     * Initializes all the available options, to be overriden by user
+     * supplied values.
+     *
+     * @return array
+     */
     protected function defaultConfigurations()
     {
         return array(
@@ -151,6 +172,12 @@ class ResourceConfiguration
         );
     }
 
+    /**
+     * Overrides default configurations with user supplied values.
+     *
+     * @param array $config
+     * @return void
+     */
     protected function initializeConfig(array $config = null)
     {
         $default = $this->defaultConfigurations();

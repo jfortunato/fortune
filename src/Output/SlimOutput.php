@@ -8,6 +8,9 @@ use Fortune\Output\BaseOutput;
 use Fortune\Serializer\SerializerInterface;
 use Fortune\ResourceInterface;
 
+/**
+ * @package Fortune
+ */
 class SlimOutput extends BaseOutput
 {
     /**

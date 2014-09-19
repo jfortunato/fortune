@@ -84,4 +84,11 @@ interface ResourceInterface
      * @return boolean
      */
     public function passesValidation(array $input);
+
+    /**
+     * Gets the parent for a resource if one exists.
+     *
+     * @return Resource|null
+     */
+    public function getParentResource();
 }

@@ -4,6 +4,9 @@ namespace Fortune\Output;
 
 use Fortune\Output\BaseOutput;
 
+/**
+ * @package Fortune
+ */
 class SimpleOutput extends BaseOutput
 {
     /**

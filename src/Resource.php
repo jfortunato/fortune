@@ -42,6 +42,11 @@ class Resource implements ResourceInterface
      */
     protected $resourceFactory;
 
+    /**
+     * The user provided configuration for this resource.
+     *
+     * @var ResourceConfiguration
+     */
     protected $config;
 
     /**
@@ -51,6 +56,7 @@ class Resource implements ResourceInterface
      * @param ResourceValidatorInterface $validator
      * @param SecurityInterface $security
      * @param ResourceFactory $resourceFactory
+     * @param ResourceConfiguration $config
      * @return void
      */
     public function __construct(
@@ -154,6 +160,9 @@ class Resource implements ResourceInterface
         return $this->validator->validate($input);
     }
 
+    /**
+     * @Override
+     */
     public function getParentResource()
     {
         return $this->config->getParent() ?
