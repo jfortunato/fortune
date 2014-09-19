@@ -3,7 +3,7 @@ Simplify repetitive tasks when building RESTful API's.
 
 ## Installation
 
-> TODO
+    composer require fortune/fortune ~0.1
 
 ## Getting Started
 
