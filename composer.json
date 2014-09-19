@@ -1,5 +1,14 @@
 {
     "name": "fortune/fortune",
+    "type": "library",
+    "description": "Simplify common RESTful API building tasks using configuration.",
+    "keywords": [
+        "rest",
+        "restful",
+        "api",
+        "resource"
+    ],
+    "license": "MIT",
     "authors": [
         {
             "name": "Justin Fortunato",
@@ -33,5 +42,8 @@
             "Fortune\\Test\\": "tests/acceptance/slim-framework/src/",
             "test\\Fortune\\": "tests/integration/phpunit/"
         }
+    },
+    "suggest": {
+        "symfony/yaml": "Configure resources with yaml instead of arrays."
     }
 }
