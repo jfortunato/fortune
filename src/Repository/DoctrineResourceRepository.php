@@ -4,6 +4,7 @@ namespace Fortune\Repository;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\ORM\Query;
 
 /**
  * Doctrine implementaion for repository to find objects in database.
@@ -52,15 +53,20 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
      */
     public function findAll()
     {
-        return $this->manager->getRepository($this->resourceClass)->findAll();
+        return $this->manager->createQuery("SELECT a FROM {$this->resourceClass} a")->getArrayResult();
     }
 
     /**
      * @Override
      */
-    public function find($id)
+    public function find($id, $hydration = Query::HYDRATE_ARRAY)
     {
-        return $this->manager->getRepository($this->resourceClass)->find($id);
+        return $this->manager->getRepository($this->resourceClass)->createQueryBuilder('a')
+            ->where("a.id = :id")
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult($hydration)
+            ;
     }
 
     /**
@@ -68,9 +74,12 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
      */
     public function findByParent($parent_id)
     {
-        $findBy = array($this->getParentRelation() => $parent_id);
-
-        return $this->manager->getRepository($this->resourceClass)->findBy($findBy);
+        return $this->manager->getRepository($this->resourceClass)->createQueryBuilder('a')
+            ->where("IDENTITY(a.{$this->getParentRelation()}) = :parent")
+            ->setParameter('parent', $parent_id)
+            ->getQuery()
+            ->getArrayResult()
+            ;
     }
 
     /**
@@ -78,9 +87,31 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
      */
     public function findOneByParent($id, $parent_id)
     {
-        $findBy = array('id' => $id, $this->getParentRelation() => $parent_id);
+        $result = $this->manager->getRepository($this->resourceClass)->createQueryBuilder('a')
+            ->where("a.id = :id")
+            ->andWhere("IDENTITY(a.{$this->getParentRelation()}) = :parent")
+            ->setParameter('id', $id)
+            ->setParameter('parent', $parent_id)
+            ->getQuery()
+            ->getOneOrNullResult(Query::HYDRATE_ARRAY)
+            ;
 
-        return $this->manager->getRepository($this->resourceClass)->findOneBy($findBy);
+        // add the relation to output, for use when validating updated resource
+        if ($result) {
+            $result[$this->getParentRelation()] = $parent_id;
+
+            return $result;
+        }
+
+        return null;
+    }
+
+    /**
+     * @Override
+     */
+    public function findForRelation($parent_id)
+    {
+        return $this->find($parent_id, Query::HYDRATE_OBJECT);
     }
 
     /**
@@ -112,7 +143,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
      */
     public function update($id, array $input)
     {
-        $resource = $this->find($id);
+        $resource = $this->find($id, Query::HYDRATE_OBJECT);
         $this->fillAttributes($resource, $input);
 
         $this->manager->persist($resource);
@@ -126,7 +157,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
      */
     public function delete($id)
     {
-        $resource = $this->find($id);
+        $resource = $this->find($id, Query::HYDRATE_OBJECT);
 
         $this->manager->remove($resource);
         $this->manager->flush();

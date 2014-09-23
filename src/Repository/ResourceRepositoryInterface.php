@@ -15,7 +15,7 @@ interface ResourceRepositoryInterface
      * Retrieve an entity by its id.
      *
      * @param int $id
-     * @return object
+     * @return array|null
      */
     public function find($id);
 
@@ -23,7 +23,7 @@ interface ResourceRepositoryInterface
      * Retrieves all entities based on their parent id.
      *
      * @param array $findBy
-     * @return array
+     * @return array|null
      */
     public function findByParent($parent_id);
 
@@ -31,9 +31,18 @@ interface ResourceRepositoryInterface
      * Retrieve an entity based on its parent id.
      *
      * @param array $findBy
-     * @return object
+     * @return array|null
      */
     public function findOneByParent($id, $parent_id);
+
+    /**
+     * Finds whatever the implementing repository
+     * needs to make a relation.
+     *
+     * @param int $parent_id
+     * @return mixed
+     */
+    public function findForRelation($parent_id);
 
     /**
      * Creates a new entity..

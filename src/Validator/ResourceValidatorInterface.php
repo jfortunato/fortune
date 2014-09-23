@@ -10,5 +10,5 @@ interface ResourceValidatorInterface
      * @param array $input
      * @return boolean
      */
-    public function validate(array $input);
+    public function validate(array $input, array $existing = array());
 }

@@ -20,11 +20,14 @@ Feature: Multiple Resource Parents
         And The toy "bone" belongs to puppy "Daisy"
         And There is a config file containing the following:
             """
-            dogs: ~
+            dogs:
+                entity: Fortune\Test\Entity\Dog
             puppies:
                 parent: dogs
+                entity: Fortune\Test\Entity\Puppy
             toys:
                 parent: puppies
+                entity: Fortune\Test\Entity\Toy
             """
 
     Scenario: Getting a list of all toys with correct url

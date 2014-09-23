@@ -1,4 +1,4 @@
-@config.minimum
+@config.minimum @doctrine
 Feature: Minimum Configuration
     In order to keep configuration simple
     As a developer

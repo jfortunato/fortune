@@ -101,6 +101,14 @@ class PdoResourceRepository implements ResourceRepositoryInterface
     /**
      * @Override
      */
+    public function findForRelation($parent_id)
+    {
+        return $this->find($parent_id);
+    }
+
+    /**
+     * @Override
+     */
     public function create(array $input)
     {
         $params = array();

@@ -133,9 +133,9 @@ abstract class BaseOutput
      * @param array $input
      * @return boolean
      */
-    protected function failsValidation(array $input)
+    protected function failsValidation(array $input, array $existing = array())
     {
-        return !$this->resource->passesValidation($input);
+        return !$this->resource->passesValidation($input, $existing);
     }
 
     /**
@@ -269,7 +269,7 @@ abstract class BaseOutput
 
         $input = $this->getInput();
 
-        if ($this->failsValidation($input)) {
+        if ($this->failsValidation($input, $entity)) {
             return $this->responseBadInput();
         }
 

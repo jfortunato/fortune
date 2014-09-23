@@ -23,8 +23,10 @@ abstract class ValitronResourceValidator implements ResourceValidatorInterface
     /**
      * @Override
      */
-    public function validate(array $input)
+    public function validate(array $input, array $existing = array())
     {
+        $input = array_merge($existing, $input);
+
         $valitron = new Validator($input);
 
         $this->addRules($valitron);

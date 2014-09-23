@@ -4,6 +4,6 @@ default:
             contexts: [ ResourceContext, ApiContext ]
     gherkin:
         filters:
-            tags: ~@wip&&~@skip
+            tags: ~@wip&&~@skip&&~doctrine
     formatters:
         progress: ~

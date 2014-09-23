@@ -108,6 +108,14 @@ class Resource implements ResourceInterface
     /**
      * @Override
      */
+    public function singleForRelation($parentId)
+    {
+        return $this->repository->findForRelation($parentId);
+    }
+
+    /**
+     * @Override
+     */
     public function create(array $input)
     {
         return $this->repository->create($input);
@@ -118,12 +126,9 @@ class Resource implements ResourceInterface
      */
     public function createWithParent($parentId, array $input)
     {
-        $childResourceConfig = $this->resourceFactory->getConfig()
-            ->getCurrentResourceConfiguration();
+        $parentResource = $this->resourceFactory->resourceFor($this->config->getParent());
 
-        $parentResource = $this->resourceFactory->resourceFor($childResourceConfig->getParent());
-
-        $parent = $parentResource->single($parentId);
+        $parent = $parentResource->singleForRelation($parentId);
 
         return $this->repository->createWithParent($input, $parent);
     }
@@ -155,9 +160,9 @@ class Resource implements ResourceInterface
     /**
      * @Override
      */
-    public function passesValidation(array $input)
+    public function passesValidation(array $input, array $existing = array())
     {
-        return $this->validator->validate($input);
+        return $this->validator->validate($input, $existing);
     }
 
     /**

@@ -37,6 +37,15 @@ interface ResourceInterface
     public function singleByParent($parentId, $id);
 
     /**
+     * Finds whatever the underlying repository needs
+     * to make a relation.
+     *
+     * @param int $parentId
+     * @return mixed
+     */
+    public function singleForRelation($parentId);
+
+    /**
      * Creates a new resource.
      *
      * @param array $input
