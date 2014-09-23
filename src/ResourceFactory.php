@@ -25,6 +25,7 @@ use Slim\Slim;
 use Fortune\Routing\SlimRouteGenerator;
 use Fortune\Repository\PdoResourceRepository;
 use Fortune\Validator\YamlResourceValidator;
+use Fortune\Serializer\JsonSerializer;
 
 /**
  * Factory for creating this packages objects.
@@ -186,11 +187,7 @@ class ResourceFactory
      */
     protected function newSerializer(ResourceConfiguration $config)
     {
-        return new JMSSerializer(
-            SerializerBuilder::create()->build(),
-            new SerializationContext,
-            new JMSPropertyExcluder($config->getExcludedProperties())
-        );
+        return new JsonSerializer($config);
     }
 
     /**

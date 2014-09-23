@@ -125,7 +125,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         $this->manager->persist($resource);
         $this->manager->flush();
 
-        return $resource;
+        return $this->find($resource->getId());
     }
 
     /**
@@ -149,7 +149,7 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
         $this->manager->persist($resource);
         $this->manager->flush();
 
-        return $resource;
+        return $this->find($id);
     }
 
     /**

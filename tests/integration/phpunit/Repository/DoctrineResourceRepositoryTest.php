@@ -30,30 +30,30 @@ class DoctrineResourceRepositoryTest extends TestCase
         $this->assertTrue(is_array($resources));
     }
 
-    public function testFindAllReturnsAllResourceObjects()
+    public function testFindAllReturnsAllAsArray()
     {
         $resources = $this->repository->findAll();
 
-        $this->assertInstanceOf('test\Fortune\Repository\fixtures\Dog', $resources[0]);
-        $this->assertInstanceOf('test\Fortune\Repository\fixtures\Dog', $resources[1]);
-        $this->assertSame(1, $resources[0]->getId());
-        $this->assertSame(2, $resources[1]->getId());
+        $this->assertTrue(is_array($resources[0]));
+        $this->assertTrue(is_array($resources[1]));
+        $this->assertSame(1, $resources[0]['id']);
+        $this->assertSame(2, $resources[1]['id']);
     }
 
-    public function testFindReturnsASingleResourceObject()
+    public function testFindReturnsASingleResourceAsArray()
     {
         $resource = $this->repository->find(1);
 
-        $this->assertInstanceOf('test\Fortune\Repository\fixtures\Dog', $resource);
-        $this->assertSame(1, $resource->getId());
+        $this->assertTrue(is_array($resource));
+        $this->assertSame(1, $resource['id']);
     }
 
     public function testCanCreateResourceWithValidInput()
     {
         $resource = $this->repository->create(['name' => 'Foo']);
 
-        $this->assertInstanceOf('test\Fortune\Repository\fixtures\Dog', $resource);
-        $this->assertSame(3, $resource->getId());
-        $this->assertSame('Foo', $resource->getName());
+        $this->assertTrue(is_array($resource));
+        $this->assertSame(3, $resource['id']);
+        $this->assertSame('Foo', $resource['name']);
     }
 }

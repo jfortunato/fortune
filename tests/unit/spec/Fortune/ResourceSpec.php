@@ -63,10 +63,10 @@ class ResourceSpec extends ObjectBehavior
 
     function it_can_check_validation($validator)
     {
-        $validator->validate(['input'])->shouldBeCalled()->willReturn(true);
+        $validator->validate(['input'], [])->shouldBeCalled()->willReturn(true);
         $this->passesValidation(['input'])->shouldReturn(true);
 
-        $validator->validate(['input'])->shouldBeCalled()->willReturn(false);
+        $validator->validate(['input'], [])->shouldBeCalled()->willReturn(false);
         $this->passesValidation(['input'])->shouldReturn(false);
     }
 }
