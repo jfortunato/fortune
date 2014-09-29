@@ -173,7 +173,9 @@ class DoctrineResourceRepository implements ResourceRepositoryInterface
     protected function fillAttributes($resource, array $attributes)
     {
         foreach ($attributes as $attribute => $value) {
-            $setter = "set" . ucfirst($attribute);
+            $camelCased = str_replace(' ', '', ucwords(str_replace('_', ' ', $attribute)));
+
+            $setter = "set{$camelCased}";
 
             if (method_exists($resource, $setter)) {
                 $resource->$setter($value);
