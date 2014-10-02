@@ -20,7 +20,7 @@ abstract class AuthenticationBouncer extends Bouncer
     /**
      * @Override
      */
-    public function check()
+    public function check($method, $resource, $identifiers = null)
     {
         return $this->config->requiresAuthentication() ?  $this->isAuthenticated() : true;
     }

@@ -15,7 +15,7 @@ class ParentBouncer extends Bouncer
     /**
      * @Override
      */
-    public function check()
+    public function check($method, $resource, $identifiers = null)
     {
         return $this->config->getParent() ? $this->routeContainsParent():true;
     }

@@ -72,4 +72,10 @@ class ResourceConfigurationSpec extends ObjectBehavior
 
         $this->getExcludedProperties()->shouldReturn(['bar', 'baz']);
     }
+
+    function it_should_get_custom_bouncers()
+    {
+        $this->beConstructedWith('foo', ['access_control' => ['custom' => ['Foo\Bar', 'Foo\Bing']]]);
+        $this->getCustomBouncers()->shouldReturn(['Foo\Bar', 'Foo\Bing']);
+    }
 }

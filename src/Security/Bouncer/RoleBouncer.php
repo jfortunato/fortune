@@ -21,7 +21,7 @@ abstract class RoleBouncer extends Bouncer
     /**
      * @Override
      */
-    public function check()
+    public function check($method, $resource, $identifiers = null)
     {
         $role = $this->config->requiresRole();
 

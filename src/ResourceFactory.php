@@ -230,10 +230,16 @@ class ResourceFactory
     {
         $config = $this->config->getCurrentResourceConfiguration();
 
+        $customBouncers = array();
+        foreach ($config->getCustomBouncers() as $bouncer) {
+            $customBouncers[] = new $bouncer($config);
+        }
+
         return new Security(
             new SimpleAuthenticationBouncer($config),
             new SimpleRoleBouncer($config),
-            new ParentBouncer($config)
+            new ParentBouncer($config),
+            $customBouncers
         );
     }
 }

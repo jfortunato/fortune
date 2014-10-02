@@ -12,7 +12,7 @@ class SecuritySpec extends ObjectBehavior
 {
     function let(AuthenticationBouncer $authBouncer, RoleBouncer $roleBouncer, ParentBouncer $parentBouncer)
     {
-        $this->beConstructedWith($authBouncer, $roleBouncer, $parentBouncer);
+        $this->beConstructedWith($authBouncer, $roleBouncer, $parentBouncer, array());
     }
 
     function it_is_initializable()
@@ -22,23 +22,23 @@ class SecuritySpec extends ObjectBehavior
 
     function it_should_return_false_when_just_one_bouncer_returns_false($authBouncer, $roleBouncer)
     {
-        $authBouncer->check()->willReturn(false);
-        $roleBouncer->check()->willReturn(true);
+        $authBouncer->check('index', 'foo', null)->willReturn(false);
+        $roleBouncer->check('index', 'foo', null)->willReturn(true);
 
-        $this->isAllowed()->shouldReturn(false);;
+        $this->isAllowed('index', 'foo', null)->shouldReturn(false);;
 
-        $authBouncer->check()->willReturn(true);
-        $roleBouncer->check()->willReturn(false);
+        $authBouncer->check('index', 'foo', null)->willReturn(true);
+        $roleBouncer->check('index', 'foo', null)->willReturn(false);
 
-        $this->isAllowed()->shouldReturn(false);;
+        $this->isAllowed('index', 'foo', null)->shouldReturn(false);;
     }
 
     function it_should_return_true_only_when_all_bouncers_return_true($authBouncer, $roleBouncer, $parentBouncer)
     {
-        $authBouncer->check()->willReturn(true);
-        $roleBouncer->check()->willReturn(true);
-        $parentBouncer->check()->willReturn(true);
+        $authBouncer->check('index', 'foo', null)->willReturn(true);
+        $roleBouncer->check('index', 'foo', null)->willReturn(true);
+        $parentBouncer->check('index', 'foo', null)->willReturn(true);
 
-        $this->isAllowed()->shouldReturn(true);
+        $this->isAllowed('index', 'foo', null)->shouldReturn(true);
     }
 }

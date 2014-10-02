@@ -2,3 +2,4 @@
 composer.lock
 db.sqlite
 /features/bootstrap/fixtures/config.yaml
+tests/acceptance/slim-framework/src/Generated/

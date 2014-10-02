@@ -152,9 +152,9 @@ class Resource implements ResourceInterface
     /**
      * @Override
      */
-    public function passesSecurity()
+    public function passesSecurity($method, $identifiers = null)
     {
-        return $this->security->isAllowed();
+        return $this->security->isAllowed($method, $this->config->getResource(), $identifiers);
     }
 
     /**

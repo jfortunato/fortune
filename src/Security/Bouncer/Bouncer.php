@@ -17,7 +17,7 @@ abstract class Bouncer
      *
      * @return boolean
      */
-    abstract public function check();
+    abstract public function check($method, $resource, $identifiers = null);
 
     /**
      * A ResourceConfiguration for a single resource.

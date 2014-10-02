@@ -84,7 +84,7 @@ interface ResourceInterface
      *
      * @return boolean
      */
-    public function passesSecurity();
+    public function passesSecurity($method, $identifiers = null);
 
     /**
      * Check if $input passes resource validation.

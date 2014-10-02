@@ -152,6 +152,17 @@ class ResourceConfiguration
         return $this->config['validation'];
     }
 
+
+    /**
+     * Gets all the configured custom bouncer class names.
+     *
+     * @return array
+     */
+    public function getCustomBouncers()
+    {
+        return $this->config['access_control']['custom'];
+    }
+
     /**
      * Initializes all the available options, to be overriden by user
      * supplied values.
@@ -167,6 +178,7 @@ class ResourceConfiguration
             'access_control' => array(
                 'authentication' => false,
                 'role'           => null,
+                'custom'         => array(),
             ),
             'exclude'        => array(),
         );

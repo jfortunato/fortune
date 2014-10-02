@@ -33,20 +33,24 @@ class Security implements SecurityInterface
     public function __construct(
         AuthenticationBouncer $authenticationBouncer,
         RoleBouncer $roleBouncer,
-        ParentBouncer $parentBouncer
+        ParentBouncer $parentBouncer,
+        array $customBouncers
     ) {
         $this->bouncers[] = $authenticationBouncer;
         $this->bouncers[] = $roleBouncer;
         $this->bouncers[] = $parentBouncer;
+        foreach ($customBouncers as $bouncer) {
+            $this->bouncers[] = $bouncer;
+        }
     }
 
     /**
      * @Override
      */
-    public function isAllowed()
+    public function isAllowed($method, $resource, $identifiers = null)
     {
         foreach ($this->bouncers as $bouncer) {
-            if (!$bouncer->check()) {
+            if (!$bouncer->check($method, $resource, $identifiers)) {
                 return false;
             }
         }

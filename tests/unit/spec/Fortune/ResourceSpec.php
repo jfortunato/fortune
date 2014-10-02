@@ -52,13 +52,15 @@ class ResourceSpec extends ObjectBehavior
         $this->delete(1)->shouldReturn(null);
     }
 
-    function it_can_check_security($security)
+    function it_can_check_security($security, $config)
     {
-        $security->isAllowed()->shouldBeCalled()->willReturn(true);
-        $this->passesSecurity()->shouldReturn(true);
+        $config->getResource()->willReturn('foo');
 
-        $security->isAllowed()->shouldBeCalled()->willReturn(false);
-        $this->passesSecurity()->shouldReturn(false);
+        $security->isAllowed('index', 'foo', null)->shouldBeCalled()->willReturn(true);
+        $this->passesSecurity('index', null)->shouldReturn(true);
+
+        $security->isAllowed('index', 'foo', null)->shouldBeCalled()->willReturn(false);
+        $this->passesSecurity('index', null)->shouldReturn(false);
     }
 
     function it_can_check_validation($validator)

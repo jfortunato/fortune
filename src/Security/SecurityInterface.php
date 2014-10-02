@@ -9,5 +9,5 @@ interface SecurityInterface
      *
      * @return boolean
      */
-    public function isAllowed();
+    public function isAllowed($method, $resource, $identifiers = null);
 }

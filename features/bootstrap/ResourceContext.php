@@ -1,6 +1,6 @@
 <?php
 
-use Behat\Behat\Exception\PendingException;
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Gherkin\Node\PyStringNode;
 use Symfony\Component\Yaml\Yaml;
@@ -9,8 +9,9 @@ use Fortune\Configuration\Configuration;
 use Fortune\Test\Entity\Dog;
 use Fortune\Test\Entity\Puppy;
 use Fortune\Test\Entity\Toy;
+use Behat\Behat\Context\SnippetAcceptingContext;
 
-class ResourceContext extends BaseContext
+class ResourceContext extends BaseContext implements SnippetAcceptingContext
 {
     /**
      * Clean the database before each scenario
@@ -114,5 +115,20 @@ class ResourceContext extends BaseContext
     public function thereIsAConfigFileContainingTheFollowing(PyStringNode $string)
     {
         file_put_contents(__DIR__ . '/fixtures/config.yaml', $string);
+    }
+
+    /**
+     * @Given The class file :file contains:
+     */
+    public function theClassFileContains($file, PyStringNode $string)
+    {
+        $dirname = dirname($file);
+        if (!file_exists($dirname)) {
+            mkdir($dirname, 0777, true);
+        }
+
+        file_put_contents($file, $string->getRaw());
+
+        require_once $file;
     }
 }

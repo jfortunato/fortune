@@ -122,9 +122,9 @@ abstract class BaseOutput
      *
      * @return boolean
      */
-    protected function failsSecurity()
+    protected function failsSecurity($method, $identifiers = null)
     {
-        return !$this->resource->passesSecurity();
+        return !$this->resource->passesSecurity($method, $identifiers);
     }
 
     /**
@@ -175,7 +175,7 @@ abstract class BaseOutput
     {
         $parents = func_get_args();
 
-        if ($this->failsSecurity()) {
+        if ($this->failsSecurity('index', $identifiers)) {
             return $this->responseDenied();
         }
 
@@ -203,7 +203,7 @@ abstract class BaseOutput
 
         $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity()) {
+        if ($this->failsSecurity('show', $identifiers)) {
             return $this->responseDenied();
         }
 
@@ -225,7 +225,7 @@ abstract class BaseOutput
     {
         $parents = func_get_args();
 
-        if ($this->failsSecurity()) {
+        if ($this->failsSecurity('create', $identifiers)) {
             return $this->responseDenied();
         }
 
@@ -259,7 +259,7 @@ abstract class BaseOutput
 
         $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity($entity)) {
+        if ($this->failsSecurity('update', $identifiers)) {
             return $this->responseDenied();
         }
 
@@ -293,7 +293,7 @@ abstract class BaseOutput
 
         $entity = $parents ? $this->resource->singleByParent(end($parents), $id) : $this->resource->single($id);
 
-        if ($this->failsSecurity($entity)) {
+        if ($this->failsSecurity('delete', $identifiers)) {
             return $this->responseDenied();
         }
 
